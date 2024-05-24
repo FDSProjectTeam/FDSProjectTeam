@@ -1,8 +1,8 @@
 package fdsprojectteam.controller;
 
 import fdsprojectteam.command.DeathClaimCommand;
-import fdsprojectteam.service.DeathClaimAutoNumService;
-import fdsprojectteam.service.DeathClaimWriteService;
+import fdsprojectteam.service.deathClaim.DeathClaimAutoNumService;
+import fdsprojectteam.service.deathClaim.DeathClaimWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

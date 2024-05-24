@@ -1,9 +1,11 @@
 package fdsprojectteam.command;
 
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@Data
 public class DeathClaimCommand {
     String claimNum;
     String claimContent;

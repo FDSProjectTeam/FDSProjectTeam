@@ -1,4 +1,4 @@
-package fdsprojectteam.service;
+package fdsprojectteam.service.deathClaim;
 
 import fdsprojectteam.command.DeathClaimCommand;
 import org.springframework.stereotype.Service;
