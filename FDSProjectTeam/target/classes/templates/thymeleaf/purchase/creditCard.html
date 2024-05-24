@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CreditCard_Payment</title>
+</head>
+<body>
+<h2>결제 정보 입력</h2>
+<form action="/payment" method="post">
+    <label for="purchase_id">결제 ID:</label><br>
+    <input type="text" id="purchase_id" name="purchase_id" th:value="${purchaseId}" required><br><br>
+
+    <label for="card_id">카드 ID:</label><br>
+    <input type="text" id="purchase_card_id" name="card_id" required><br><br>
+
+    <label for="customer_id">고객 ID:</label><br>
+    <input type="text" id="purchase_customer_id" name="customer_id" required><br><br>
+
+    <label for="country_id">국가 ID:</label><br>
+    <input type="text" id="purchase_country_id" name="country_id" required><br><br>
+
+    <label for="purchase_price">결제 금액:</label><br>
+    <input type="number" id="purchase_price" name="purchase_price" required><br><br>
+
+    <label for="ip_address">IP 주소:</label><br>
+    <input type="text" id="ip_address" name="ip_address" required><br><br>
+
+    <input type="submit" value="제출">
+</form>
+</body>
+</html>
