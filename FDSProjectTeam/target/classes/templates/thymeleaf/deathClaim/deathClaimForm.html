@@ -17,10 +17,10 @@
     </table>
     <form action="deathClaimWrite" method="post">
         <!-- 기존의 청구서를 가져오거나, 또는 직접 작성할 수 있게 기능을 구현했습니다. -->
-        <!-- 청구 번호는 자동부여 기능을 구현했습니다. -->
+        <!-- 청구 번호는 모듈화를 통해 자동부여 기능을 구현했습니다. -->
         <table class="table table-borderless">
             <tr><th>청구 번호<br />
-                <input type="text" class="form-control" name="claimNum" readonly="readonly"></th></tr>
+                <input type="text" class="form-control" name="claimNum" th:value="${deathClaimCommand.claimNum}" readonly="readonly"></th></tr>
             <tr><th>청구 내용<br />
                 <textarea name="claimContent" class="form-control" rows="6" cols="40"></textarea></th></tr>
             <tr><th>가입자 성명<br />

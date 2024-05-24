@@ -18,7 +18,7 @@ public class DeathClaimAutoNumService {
         Map<String, String> map = new HashMap<>();
         map.put("tableName", "DEATH_CLAIM");
         map.put("columnName", "CLAIM_NUM");
-        map.put("sep", "DEC");
+        map.put("sep", "DEC_");
         String claimNum = autoNumMapper.autoNumSelect(map);
         DeathClaimCommand deathClaimCommand = new DeathClaimCommand();
         deathClaimCommand.setClaimNum(claimNum);
