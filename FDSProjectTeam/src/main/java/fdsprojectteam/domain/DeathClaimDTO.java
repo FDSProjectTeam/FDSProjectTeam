@@ -1,5 +1,6 @@
 package fdsprojectteam.domain;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
@@ -7,13 +8,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@Setter
-@Getter
+@Data
 @Alias("deathClaim")
 public class DeathClaimDTO {
     String claimNum;
     String claimContent;
-    String subName;
+    String insId;
     String claimName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date claimBirth;
@@ -27,4 +27,6 @@ public class DeathClaimDTO {
     String placeOfDeath;
     String typeOfDeath;
     String beneficiaryAccount;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    Date claimDate;
 }

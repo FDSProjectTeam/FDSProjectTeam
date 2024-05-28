@@ -2,6 +2,7 @@ package fdsprojectteam.controller;
 
 import fdsprojectteam.command.DeathClaimCommand;
 import fdsprojectteam.service.deathClaim.DeathClaimAutoNumService;
+import fdsprojectteam.service.deathClaim.DeathClaimListService;
 import fdsprojectteam.service.deathClaim.DeathClaimWriteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,8 @@ public class DeathClaimController {
     DeathClaimAutoNumService deathClaimAutoNumService;
     @Autowired
     DeathClaimWriteService deathClaimWriteService;
+    @Autowired
+    DeathClaimListService deathClaimListService;
     @GetMapping("deathClaimWrite")
     public String deathClaimForm(Model model){
         deathClaimAutoNumService.execute(model);
@@ -26,5 +29,10 @@ public class DeathClaimController {
     public String deathClaimWrite(DeathClaimCommand deathClaimCommand){
         deathClaimWriteService.execute(deathClaimCommand);
         return "thymeleaf/deathClaim/deathClaimResult";
+    }
+    @GetMapping("deathClaimList")
+    public String deathClaimList(Model model){
+        deathClaimListService.execute(model);
+        return "thymeleaf/deathClaim/deathClaimList";
     }
 }

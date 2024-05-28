@@ -22,7 +22,6 @@ public class DeathClaimAutoNumService {
         String claimNum = autoNumMapper.autoNumSelect(map);
         DeathClaimCommand deathClaimCommand = new DeathClaimCommand();
         deathClaimCommand.setClaimNum(claimNum);
-
         model.addAttribute("deathClaimCommand", deathClaimCommand);
     }
 }

@@ -9,7 +9,7 @@ import java.util.Date;
 public class DeathClaimCommand {
     String claimNum;
     String claimContent;
-    String subName;
+    String insId;
     String claimName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date claimBirth;
@@ -23,4 +23,6 @@ public class DeathClaimCommand {
     String placeOfDeath;
     String typeOfDeath;
     String beneficiaryAccount;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    Date claimDate;
 }
