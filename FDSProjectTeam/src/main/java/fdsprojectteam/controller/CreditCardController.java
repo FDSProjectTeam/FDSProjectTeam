@@ -18,7 +18,7 @@ public class CreditCardController {
 
     @GetMapping("creditCard")
     public String creditCard(Model model){
-        purchaseAutoNumSelectService.execute(model);
+        // purchaseAutoNumSelectService.execute(model);
         return "thymeleaf/purchase/creditCardForm";
     }
 

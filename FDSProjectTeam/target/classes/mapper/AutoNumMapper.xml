@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="fdsprojectteam.mapper.AutoNumMapper">
     <select id="autoNumSelect" resultType="string" parameterType="hashmap">
-        select concat(#{sep}, nvl(max(substr(${columnName}, 5)), 100000) + 1)
+        select concat(#{sep}, nvl(max(substr(${columnName}, 4)), 100000) + 1)
         from ${tableName}
         ORDER BY ${columnName}
     </select>

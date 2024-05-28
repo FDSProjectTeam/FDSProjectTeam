@@ -30,7 +30,7 @@ public class DeathClaimController {
         deathClaimWriteService.execute(deathClaimCommand);
         return "thymeleaf/deathClaim/deathClaimResult";
     }
-    @GetMapping("deathClaimList")
+    @RequestMapping("deathClaimList")
     public String deathClaimList(Model model){
         deathClaimListService.execute(model);
         return "thymeleaf/deathClaim/deathClaimList";

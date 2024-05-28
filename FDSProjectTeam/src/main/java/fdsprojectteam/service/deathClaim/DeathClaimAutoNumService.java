@@ -1,7 +1,6 @@
 package fdsprojectteam.service.deathClaim;
 
 import fdsprojectteam.command.DeathClaimCommand;
-import fdsprojectteam.command.PurchaseCommand;
 import fdsprojectteam.mapper.AutoNumMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +21,7 @@ public class DeathClaimAutoNumService {
         String claimNum = autoNumMapper.autoNumSelect(map);
         DeathClaimCommand deathClaimCommand = new DeathClaimCommand();
         deathClaimCommand.setClaimNum(claimNum);
+
         model.addAttribute("deathClaimCommand", deathClaimCommand);
     }
 }

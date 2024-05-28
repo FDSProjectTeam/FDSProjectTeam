@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <title>사망보험 청구서 목록</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+    <script type="text/javascript">
+        function claimItem(claimNum, insId){
+            $(opener.document).find("#claimNum").val(claimNum);
+            $(opener.document).find("#insId").val(insId);
+            window.self.close();
+        }
+    </script>
 </head>
 <body>
     <table border="1" width="600" align="center">
         <tr><th>번호</th><th>청구 번호</th><th>피보험자 번호</th><th>청구인 성명</th><th>청구일</th></tr>
         <tr th:each="dto, idx : ${dtos}">
             <th>[[${idx.count }]]</th>
-            <td>[[${dto.claimNum }]]</td>
+            <td><a th:href="|javascript:claimItem('${dto.claimNum }'
+                ,'${dto.insId}')|">[[${dto.claimNum }]]</a></td>
             <td>[[${dto.insId }]]</td>
             <td>[[${dto.claimName }]]</td>
             <td>[[${#dates.format(dto.claimDate, 'yyyy-MM-dd') }]]</td>

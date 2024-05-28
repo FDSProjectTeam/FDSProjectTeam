@@ -15,13 +15,13 @@
             <idArg column="INS_ID" javaType="string" jdbcType="VARCHAR" />
             <arg column="CLAIM_CONTENT" javaType="string" jdbcType="VARCHAR" />
             <arg column="CLAIM_NAME" javaType="string" jdbcType="VARCHAR" />
-            <arg column="CLAIM_BIRTH" javaType="java.util.Date" jdbcType="DATE" />
+            <arg column="CLAIM_BIRTH" javaType="java.util.Date" />
             <arg column="CLAIM_ADDR" javaType="string" jdbcType="VARCHAR" />
             <arg column="CLAIM_ADDR_DETAIL" javaType="string" jdbcType="VARCHAR" />
             <arg column="CLAIM_POST" javaType="integer" jdbcType="BIGINT" />
             <arg column="CLAIM_EMAIL" javaType="string" jdbcType="VARCHAR" />
             <arg column="CAUSE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
-            <arg column="DATE_OF_DEATH" javaType="java.util.Date" jdbcType="DATE" />
+            <arg column="DATE_OF_DEATH" javaType="java.util.Date" />
             <arg column="PLACE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
             <arg column="TYPE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
             <arg column="BENEFICIARY_ACCOUNT" javaType="string" jdbcType="VARCHAR" />

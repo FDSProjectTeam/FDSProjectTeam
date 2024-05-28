@@ -6,25 +6,33 @@
 <head>
     <meta charset="UTF-8">
     <title>deathClaimForm.html</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+    <script type="text/javascript">
+        $(function(){
+            $("#btnGetClaim").click(function(){
+                window.open("../deathClaim/deathClaimList","청구서 목록", "width=640, height=500, left=30, top=50")
+            });
+        });
+    </script>
 </head>
 <body>
     <br />
     <h3 style="text-align: center">사망보험 청구서</h3>
     <br />
     <table class="table table-borderless" style="text-align: right;">
-        <tr><th><a href="deathClaimList">청구서 가져오기</a></th></tr>
+        <tr><th><button id="btnGetClaim" class="btn btn-outline-dark">청구서 가져오기</button></th></tr>
     </table>
     <form action="deathClaimWrite" method="post">
         <!-- 기존의 청구서를 가져오거나, 또는 직접 작성할 수 있게 기능을 구현했습니다. -->
         <!-- 청구 번호는 모듈화를 통해 자동부여 기능을 구현했습니다. -->
         <table class="table table-borderless">
             <tr><th>청구 번호<br />
-                <input type="text" class="form-control" name="claimNum" th:value="${deathClaimCommand.claimNum}" readonly="readonly"></th></tr>
+                <input type="text" class="form-control" id="claimNum" name="claimNum" th:value="${deathClaimCommand.claimNum}" readonly="readonly"></th></tr>
+            <tr><th>피보험자 번호<br />
+                <input type="text" class="form-control" id="insId" name="InsId" /></th></tr>
             <tr><th>청구 내용<br />
                 <textarea name="claimContent" class="form-control" rows="6" cols="40"></textarea></th></tr>
-            <tr><th>가입자 성명<br />
-                <input type="text" class="form-control" name="subName" /></th></tr>
             <tr><th>청구인 성명<br />
                 <input type="text" class="form-control" name="claimName" /></th></tr>
             <tr><th>청구인 생년월일<br />
