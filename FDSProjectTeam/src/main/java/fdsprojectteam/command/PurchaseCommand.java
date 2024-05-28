@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PurchaseCommand {
     private String purchaseId;
-    private String cardId;
     private String customerId;
-    private String countryId;
     private String purchasePrice;
+    private String cardNum;
+    private String expiryYear;
+    private String expiryMonth;
     private String ipAddress;
 }
