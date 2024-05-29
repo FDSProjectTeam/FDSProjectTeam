@@ -8,7 +8,8 @@
         CUSTOMER_ID,
         CARD_NUM,
         EXPIRY_DATE,
-        ISSUE_COUNTRY
+        ISSUE_COUNTRY,
+        nvl(ERROR_COUNT, 0) as ERROR_COUNT
     </sql>
     <sql id="countryBaseColumns">
         COUNTRY_ID,
@@ -24,6 +25,7 @@
             <arg column="CARD_NUM" javaType="string" />
             <arg column="EXPIRY_DATE" javaType="java.util.Date" />
             <arg column="ISSUE_COUNTRY" javaType="string" />
+            <arg column="ERROR_COUNT" javaType="integer" />
         </constructor>
     </resultMap>
     <resultMap id="countryBaseColumns" type="country">
@@ -45,4 +47,9 @@
         from country
         where #{ipAddress} between IP_START_NUM and IP_END_NUM
     </select>
+    <update id="errorCountUpdate" parameterType="hashmap">
+        update card
+        set ERROR_COUNT = #{errorCount}
+        where CARD_NUM = #{cardNum}
+    </update>
 </mapper>

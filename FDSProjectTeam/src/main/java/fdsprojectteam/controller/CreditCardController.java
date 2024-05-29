@@ -25,7 +25,13 @@ public class CreditCardController {
     @PostMapping("payment")
     public String payment(Model model, PurchaseCommand purchaseCommand){
         // request.getremoteaddr() : 입력한 사람의 ip주소를 받아오는 명령어
-        paymentService.execute(purchaseCommand);
-        return "";
+        int i = paymentService.execute(purchaseCommand, model);
+        // System.out.println(i);
+        if (i == 0) {
+            return "thymeleaf/purchase/creditCardSuccess";
+        }else{
+            model.addAttribute("errorCode", i);
+            return "thymeleaf/purchase/creditCardFail";
+        }
     }
 }

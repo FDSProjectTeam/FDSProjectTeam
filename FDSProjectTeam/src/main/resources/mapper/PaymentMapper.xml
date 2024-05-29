@@ -8,7 +8,8 @@
         CUSTOMER_ID,
         CARD_NUM,
         EXPIRY_DATE,
-        ISSUE_COUNTRY
+        ISSUE_COUNTRY,
+        nvl(ERROR_COUNT, 0) as ERROR_COUNT
     </sql>
     <sql id="countryBaseColumns">
         COUNTRY_ID,
@@ -17,6 +18,11 @@
         IP_START_NUM,
         IP_END_NUM
     </sql>
+    <sql id="tradingHaltBaseColumns">
+        CARD_ID,
+        CUSTOMER_ID,
+        HALT_DATE
+    </sql>
     <resultMap id="cardResultMap" type="card">
         <constructor>
             <idArg column="CARD_ID" javaType="string" />
@@ -24,6 +30,7 @@
             <arg column="CARD_NUM" javaType="string" />
             <arg column="EXPIRY_DATE" javaType="java.util.Date" />
             <arg column="ISSUE_COUNTRY" javaType="string" />
+            <arg column="ERROR_COUNT" javaType="integer" />
         </constructor>
     </resultMap>
     <resultMap id="countryBaseColumns" type="country">
@@ -45,4 +52,20 @@
         from country
         where #{ipAddress} between IP_START_NUM and IP_END_NUM
     </select>
+    <update id="errorCountUpdate" parameterType="hashmap">
+        update card
+        set ERROR_COUNT = #{errorCount}
+        where CARD_NUM = #{cardNum}
+    </update>
+    <update id="tradingHaltUpdate" parameterType="card">
+        merge into TRADING_HALT t
+        using (select CARD_ID from CARD where CARD_ID = #{cardId}) c
+        on (c.CARD_ID = t.CARD_ID)
+        when matched then
+            update set HALT_DATE = null
+            delete where CARD_ID = #{cardId}
+        when not matched then
+            insert (<include refid="tradingHaltBaseColumns" />)
+            values (#{cardId}, #{customerId}, sysdate)
+    </update>
 </mapper>
