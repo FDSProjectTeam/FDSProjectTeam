@@ -14,23 +14,26 @@
     <h3 style="text-align: center">부당 지급 확인 결과</h3>
     <br />
     <table class="table table-bordered table-hover" style="text-align: center;">
-        <tr><th>청구번호</th><td>청구번호</td></tr>
-        <tr><th>가입자성명</th><td>가입자성명</td></tr>
-        <tr><th>청구인성명</th><td>청구인성명</td></tr>
-        <tr><th>청구인 생년월일</th><td>청구인 생년월일</td></tr>
-        <tr><th>청구인 주소</th><td>청구인 주소</td></tr>
-        <tr><th>청구인 상세주소</th><td>청구인 상세주소</td></tr>
-        <tr><th>청구인 우편번호</th><td>청구인 우편번호</td></tr>
-        <tr><th>청구인 이메일</th><td>청구인 이메일</td></tr>
-        <tr><th>사망 원인</th><td>사망 원인</td></tr>
-        <tr><th>사망일</th><td>사망일</td></tr>
-        <tr><th>사망 장소</th><td>사망 장소</td></tr>
-        <tr><th>사망의 종류</th><td>사망의 종류</td></tr>
-        <tr><th>보험금 수령 계좌</th><td>보험금 수령 계좌</td></tr>
+        <tr><th>청구번호</th><td>[[${deathClaimCommand.claimNum }]]</td></tr>
+        <tr><th>가입자성명</th><td>[[${insName }]]</td></tr>
+        <tr><th>청구인성명</th><td>[[${deathClaimCommand.claimName }]]</td></tr>
+        <tr><th>청구인 생년월일</th><td>[[${#dates.format(deathClaimCommand.claimBirth, 'yyyy-MM-dd') }]]</td></tr>
+        <tr><th>청구인 주소</th><td>[[${deathClaimCommand.claimAddr }]]</td></tr>
+        <tr><th>청구인 상세주소</th><td>[[${deathClaimCommand.claimAddrDetail }]]</td></tr>
+        <tr><th>청구인 우편번호</th><td>[[${deathClaimCommand.claimPost }]]</td></tr>
+        <tr><th>청구인 이메일</th><td>[[${deathClaimCommand.claimEmail }]]</td></tr>
+        <tr><th>사망 원인</th><td>[[${deathClaimCommand.causeOfDeath }]]</td></tr>
+        <tr><th>사망일</th><td>[[${#dates.format(deathClaimCommand.dateOfDeath,'yyyy-MM-dd') }]]</td></tr>
+        <tr><th>사망 장소</th><td>[[${deathClaimCommand.placeOfDeath }]]</td></tr>
+        <!-- <tr><th>사망의 종류</th><td>[[${deathClaimCommand.typeOfDeath }]]</td></tr> -->
+        <tr><th>보험금 수령 계좌</th><td>[[${deathClaimCommand.beneficiaryAccount }]]</td></tr>
         <!-- 시나리오에 의해 지급 거부가 되면 거부 사유가 출력되도록 기능을 구현했습니다. -->
-        <tr><th colspan="2"><span style="color: green; font-size: large;">지급 승인</span>
-                            <span style="color: red; font-size: large;">지급 거부</span></th></tr>
-        <tr><th colspan="2">사유 : [시나리오]</th></tr>
+        <tr><th colspan="2">
+            <span th:if="!${#strings.isEmpty(accepted)}" style="color: green; font-size: large;">지급 승인</span>
+            <span th:if="!${#strings.isEmpty(denied)}" style="color: red; font-size: xx-large">지급 거부</span></th></tr>
+        <th:block th:if="!${#strings.isEmpty(denied)}">
+        <tr><th colspan="2">사유 : [[${denied }]]</th></tr>
+        </th:block>
     </table>
     <table class="table table-borderless" style="text-align: center;">
         <tr><th><button type="button" class="btn btn-outline-dark" onclick="javascript:location.href='/'">홈으로</button></th></tr>

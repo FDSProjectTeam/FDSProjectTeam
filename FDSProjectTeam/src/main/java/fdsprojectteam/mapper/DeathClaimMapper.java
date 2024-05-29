@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface DeathClaimMapper {
     public List<DeathClaimDTO> allSelect(DeathClaimDTO deathClaimDTO);
+    public DeathClaimDTO selectOne(String claimNum);
 }

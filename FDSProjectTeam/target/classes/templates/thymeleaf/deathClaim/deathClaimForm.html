@@ -7,12 +7,73 @@
     <meta charset="UTF-8">
     <title>deathClaimForm.html</title>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="../static/assets/js/daumAddressScript.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
     <script type="text/javascript">
         $(function(){
-            $("#btnGetClaim").click(function(){
-                window.open("../deathClaim/deathClaimList","청구서 목록", "width=640, height=500, left=30, top=50")
+            $("#manualBtn").click(function(){
+                $("#claimNum").val("[[${deathClaimCommand.claimNum }]]")
+                $("#insId").val("");
+                $("#claimContent").val("");
+                $("#claimName").val("");
+                $("#claimBirth").val("");
+                $("#sample4_roadAddress").val("");
+                $("#claimAddrDetail").val("");
+                $("#sample4_postcode").val("");
+                $("#claimEmail").val("");
+                $("#causeOfDeath").val("");
+                $("#dateOfDeath").val("");
+                $("#placeOfDeath").val("");
+                $("#typeOfDeath").val("");
+                $("#beneficiaryAccount").val("");
+                $("#claimDate").val("");
+                $("#manualBtn").css("display", "none");
+                return false;
             });
+            $("#btnGetClaim").click(function(){
+                var openedWindow = window.open("../deathClaim/deathClaimList","청구서 목록", "width=640, height=500, left=30, top=50")
+                // 주기적으로 열린 창이 닫혔는지 확인
+                var checkWindowClosed = setInterval(function(){
+                    if(openedWindow.closed){
+                        clearInterval(checkWindowClosed); // 창이 닫혔으면 타이머를 멈춘다.
+                        $.ajax({
+                            type: "POST",
+                            url: "deathClaimDetail",
+                            data:{"claimNum": $("#claimNum").val()},
+                            success: function (dto){
+                                console.log(dto);
+                                $("#insId").val(dto.insId);
+                                $("#claimContent").val(dto.claimContent);
+                                $("#claimName").val(dto.claimName);
+                                $("#claimBirth").val(formatDate(dto.claimBirth));
+                                $("#sample4_roadAddress").val(dto.claimAddr);
+                                $("#claimAddrDetail").val(dto.claimAddrDetail);
+                                $("#sample4_postcode").val(dto.claimPost);
+                                $("#claimEmail").val(dto.claimEmail);
+                                $("#causeOfDeath").val(dto.causeOfDeath);
+                                $("#dateOfDeath").val(formatDate(dto.dateOfDeath));
+                                $("#placeOfDeath").val(dto.placeOfDeath);
+                                $("#typeOfDeath").val(dto.typeOfDeath);
+                                $("#beneficiaryAccount").val(dto.beneficiaryAccount);
+                                $("#claimDate").val(formatDate(dto.claimDate));
+                                $("#manualBtn").css("display", "block");
+                            },
+                            error: function onError(error){
+                                console.error(error);
+                            }
+                        });
+                    }
+                })
+            });
+            // 날짜를 yyyy-MM-dd 형식으로 변환하는 함수
+            function formatDate(dateStr) {
+                var date = new Date(dateStr);
+                var year = date.getFullYear();
+                var month = ("0" + (date.getMonth() + 1)).slice(-2); // 월을 2자리로 변환
+                var day = ("0" + date.getDate()).slice(-2); // 일을 2자리로 변환
+                return year + "-" + month + "-" + day;
+            }
         });
     </script>
 </head>
@@ -23,40 +84,59 @@
     <table class="table table-borderless" style="text-align: right;">
         <tr><th><button id="btnGetClaim" class="btn btn-outline-dark">청구서 가져오기</button></th></tr>
     </table>
-    <form action="deathClaimWrite" method="post">
+    <form action="deathClaimWrite" method="post" th:object="${deathClaimCommand}" id="frm">
         <!-- 기존의 청구서를 가져오거나, 또는 직접 작성할 수 있게 기능을 구현했습니다. -->
         <!-- 청구 번호는 모듈화를 통해 자동부여 기능을 구현했습니다. -->
         <table class="table table-borderless">
             <tr><th>청구 번호<br />
-                <input type="text" class="form-control" id="claimNum" name="claimNum" th:value="${deathClaimCommand.claimNum}" readonly="readonly"></th></tr>
+                <input type="text" class="form-control" id="claimNum" name="claimNum"
+                       th:value="${deathClaimCommand.claimNum}" readonly="readonly">
+                <button class="btn btn-outline-dark" style="display: none;" id="manualBtn">직접 입력</button></th></tr>
             <tr><th>피보험자 번호<br />
-                <input type="text" class="form-control" id="insId" name="InsId" /></th></tr>
+                <input type="text" class="form-control" id="insId" name="insId" placeholder="INS000000" th:value="${deathClaimCommand.insId }" />
+                <span style="color:red" th:if="${#fields.hasErrors('insId')}" th:errors="*{insId}"></span></th></tr>
             <tr><th>청구 내용<br />
-                <textarea name="claimContent" class="form-control" rows="6" cols="40"></textarea></th></tr>
+                <textarea name="claimContent" id="claimContent" class="form-control" rows="6" cols="40">[[${deathClaimCommand.claimContent }]]</textarea>
+                <span style="color:red" th:if="${#fields.hasErrors('claimContent')}" th:errors="*{claimContent}"></span></th></tr>
             <tr><th>청구인 성명<br />
-                <input type="text" class="form-control" name="claimName" /></th></tr>
+                <input type="text" class="form-control" id="claimName" name="claimName" th:value="${deathClaimCommand.claimName }" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimName')}" th:errors="*{claimName}"></span></th></tr>
             <tr><th>청구인 생년월일<br />
-                <input type="date" class="form-control" name="claimName" /></th></tr>
+                <input type="date" class="form-control" id="claimBirth" name="claimBirth" th:value="${#dates.format(deathClaimCommand.claimBirth, 'yyyy-MM-dd') }" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimBirth')}" th:errors="*{claimBirth}"></span></th></tr>
             <tr><th>청구인 주소<br />
-                <input type="text" class="form-control" name="claimAddr" /></th></tr>
+                <input type="text" class="form-control" id="sample4_roadAddress" name="claimAddr" th:value="${deathClaimCommand.claimAddr }"
+                       th:onclick="execDaumPostcode();" readonly="readonly" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimAddr')}" th:errors="*{claimAddr}"></span></th></tr>
             <tr><th>청구인 상세주소<br />
-                <input type="text" class="form-control" name="claimAddrDetail" /></th></tr>
+                <input type="text" class="form-control" id="claimAddrDetail" name="claimAddrDetail" th:value="${deathClaimCommand.claimAddrDetail }" /></th></tr>
             <tr><th>청구인 우편번호<br />
-                <input type="number" class="form-control" name="claimPost" /></th></tr>
+                <input type="number" class="form-control" id="sample4_postcode" name="claimPost" th:value="${deathClaimCommand.claimPost }"
+                       readonly="readonly" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimPost')}" th:errors="*{claimPost}"></span></th></tr>
             <tr><th>청구인 이메일<br />
-                <input type="email" class="form-control" name="claimEmail" /></th></tr>
+                <input type="email" class="form-control" id="claimEmail" name="claimEmail" th:value="${deathClaimCommand.claimEmail }" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimEmail')}" th:errors="*{claimEmail}"></span></th></tr>
             <tr><th>사망 원인<br />
-                <input type="text" class="form-control" name="causeOfDeath" /></th></tr>
+                <input type="text" class="form-control" id="causeOfDeath" name="causeOfDeath" th:value="${deathClaimCommand.causeOfDeath }" />
+                <span style="color:red" th:if="${#fields.hasErrors('causeOfDeath')}" th:errors="*{causeOfDeath}"></span></th></tr>
             <tr><th>사망일<br />
-                <input type="date" class="form-control" name="dateOfDeath" /></th></tr>
+                <input type="date" class="form-control" id="dateOfDeath" name="dateOfDeath" th:value="${#dates.format(deathClaimCommand.dateOfDeath,'yyyy-MM-dd') }" />
+                <span style="color:red" th:if="${#fields.hasErrors('dateOfDeath')}" th:errors="*{dateOfDeath}"></span></th></tr>
             <tr><th>사망 장소<br />
-                <input type="text" class="form-control" name="placeOfDeath" /></th></tr>
-            <tr><th>사망의 종류<br />
-                <input type="text" class="form-control" name="typeOfDeath" /></th></tr>
+                <input type="text" class="form-control" id="placeOfDeath" name="placeOfDeath" th:value="${deathClaimCommand.placeOfDeath }" />
+                <span style="color:red" th:if="${#fields.hasErrors('placeOfDeath')}" th:errors="*{placeOfDeath}"></span></th></tr>
+            <!--
+                <tr><th>사망의 종류<br />
+                <input type="text" class="form-control" id="typeOfDeath" name="typeOfDeath" th:value="${deathClaimCommand.typeOfDeath }" />
+                <span style="color:red" th:if="${#fields.hasErrors('typeOfDeath')}" th:errors="*{typeOfDeath}"></span></th></tr>
+            -->
             <tr><th>보험금 수령 계좌<br />
-                <input type="text" class="form-control" name="beneficiaryAccount" /></th></tr>
+                <input type="text" class="form-control" id="beneficiaryAccount" name="beneficiaryAccount" th:value="${deathClaimCommand.beneficiaryAccount }" />
+                <span style="color:red" th:if="${#fields.hasErrors('beneficiaryAccount')}" th:errors="*{beneficiaryAccount}"></span></th></tr>
             <tr><th>청구일
-                <input type="date" class="form-control" name="claimDate" /></th></tr>
+                <input type="date" class="form-control" id="claimDate" name="claimDate" th:value="${#dates.format(deathClaimCommand.claimDate,'yyyy-MM-dd') }" />
+                <span style="color:red" th:if="${#fields.hasErrors('claimDate')}" th:errors="*{claimDate}"></span></th></tr>
         </table>
         <table class="table table-borderless" style="text-align: center;">
             <tr><th><input type="submit" class="btn btn-outline-dark" value="확인">

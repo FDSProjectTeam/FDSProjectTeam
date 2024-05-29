@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>사망보험 청구서 목록</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
     <script type="text/javascript">
         function claimItem(claimNum, insId){
             $(opener.document).find("#claimNum").val(claimNum);
-            $(opener.document).find("#insId").val(insId);
+            // $(opener.document).find("#insId").val(insId);
             window.self.close();
         }
     </script>

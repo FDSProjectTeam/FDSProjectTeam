@@ -33,4 +33,9 @@
         FROM DEATH_CLAIM
         ORDER BY CLAIM_NUM
     </select>
+    <select id="selectOne" parameterType="string" resultMap="deathClaimResultMap">
+        SELECT <include refid="deathClaimColumnBase" />
+        FROM DEATH_CLAIM
+        WHERE CLAIM_NUM = #{claimNum}
+    </select>
 </mapper>
