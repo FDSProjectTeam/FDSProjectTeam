@@ -29,13 +29,41 @@
         </constructor>
     </resultMap>
     <select id="allSelect" resultMap="deathClaimResultMap">
-        SELECT <include refid="deathClaimColumnBase" />
-        FROM DEATH_CLAIM
-        ORDER BY CLAIM_NUM
+        SELECT * FROM (
+                      SELECT ROW_NUMBER() OVER (ORDER BY CLAIM_NUM DESC) as rn,
+                      <include refid="deathClaimColumnBase" />
+                      FROM DEATH_CLAIM
+                      <where>
+                          <if test="searchWord != null">
+                              CLAIM_NUM LIKE '%' || #{searchWord} || '%'
+                              OR CLAIM_NAME LIKE '%' || #{searchWord} || '%'
+                          </if>
+                      </where>
+                      )
+        WHERE rn BETWEEN #{startRow} AND #{endRow}
     </select>
     <select id="selectOne" parameterType="string" resultMap="deathClaimResultMap">
         SELECT <include refid="deathClaimColumnBase" />
         FROM DEATH_CLAIM
         WHERE CLAIM_NUM = #{claimNum}
+    </select>
+    <select id="selectCount" resultType="deathClaimCount">
+        SELECT CAUSE_OF_DEATH as causeOfDeath, COUNT(*) as totalCount
+        FROM DEATH_CLAIM
+        GROUP BY CAUSE_OF_DEATH
+    </select>
+    <select id="selectPlaceCount" resultType="deathClaimPlaceCount">
+        SELECT PLACE_OF_DEATH as placeOfDeath, COUNT(*) as placeOfDeathCount
+        FROM DEATH_CLAIM
+        GROUP BY PLACE_OF_DEATH
+    </select>
+    <select id="deathClaimCount" parameterType="string" resultType="integer">
+        SELECT COUNT(*) FROM DEATH_CLAIM
+        <where>
+            <if test="searchWord != null">
+                CLAIM_NUM like '%' || #{searchWord} || '%'
+                OR CLAIM_NAME like '%' || #{searchWord} || '%'
+            </if>
+        </where>
     </select>
 </mapper>

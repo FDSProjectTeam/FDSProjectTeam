@@ -42,6 +42,10 @@ public class DeathClaimWriteService {
             model.addAttribute("denied", "가족관계 변조 의심");
         } else if(deathClaimCommand.getCauseOfDeath().equals("자살")){ // 자살로 인한 사망
             model.addAttribute("denied", "자살로 인한 사망");
+        } else if(deathClaimCommand.getCauseOfDeath().equals("감염병")){
+            model.addAttribute("denied", "COVID-19 등 감염병으로 인한 사망");
+        } else if(deathClaimCommand.getPlaceOfDeath().equals("실종")){
+            model.addAttribute("denied", "피보험자 실종 상태");
         } else {
             // 모두 해당되지 않는다면
             // 지급 승인
