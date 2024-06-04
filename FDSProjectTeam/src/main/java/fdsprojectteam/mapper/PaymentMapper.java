@@ -1,7 +1,6 @@
 package fdsprojectteam.mapper;
 
-import fdsprojectteam.domain.CardDTO;
-import fdsprojectteam.domain.CountryDTO;
+import fdsprojectteam.domain.*;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Map;
@@ -15,4 +14,24 @@ public interface PaymentMapper {
     void errorCountUpdate(Map<String, Object> map);
 
     void tradingHaltUpdate(CardDTO cardDTO);
+
+    TradingHaltDTO tradingHaltSelectOne(String cardNum);
+
+    int avgPriceSelect(String cardId);
+
+    void purchaseInsert(PurchaseDTO dto);
+
+    int purchaseCount(String customerId);
+
+    void cardErrorCountUpdate(String cardId);
+
+    void ipAgreeInsert(Map<String, Object> map);
+
+    void ipBlockInsert(Map<String, Object> map);
+
+    IPBlockDTO ipBlockSelect(Map<String, Object> map);
+
+    int ipBlockCount(long ipAddress);
+
+    IPAgreeDTO ipAgreeSelect(Map<String, Object> map);
 }

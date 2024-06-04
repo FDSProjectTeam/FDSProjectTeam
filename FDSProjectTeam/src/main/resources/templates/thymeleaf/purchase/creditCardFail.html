@@ -7,8 +7,14 @@
 <body>
 결제 실패 페이지 입니다.<br />
 errorCode : [[${errorCode}]] <br />
-ipAddress : [[${ipAddress}]] <br />
-errorCount : [[${errorCount}]] <br /><br />
+errorCount : [[${errorCount}]] <br />
+errorMessage : [[${errorMessage}]] <br />
+<th:block th:if="${purchaseCommand.ipAddress != null}">
+    ipAddress : [[${purchaseCommand.ipAddress}]] <br />
+    본인이 맞습니까?<br />
+    <a th:href="|ipAgree?ipAddress=${purchaseCommand.ipAddress}&customerId=${purchaseCommand.customerId}|">예</a> / <a href="ipBlock">IP 차단하기</a>
+</th:block>
+<br />
 고객센터에 연락주셔서 인증절차를 밟아주시길 바랍니다.<br />
 1234-5678
 </body>

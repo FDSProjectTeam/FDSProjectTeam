@@ -1,6 +1,8 @@
 package fdsprojectteam.controller;
 
 import fdsprojectteam.command.PurchaseCommand;
+import fdsprojectteam.service.purchase.IPAddressService;
+import fdsprojectteam.service.purchase.IPBlockService;
 import fdsprojectteam.service.purchase.PaymentService;
 import fdsprojectteam.service.purchase.PurchaseAutoNumSelectService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ public class CreditCardController {
 
     private final PurchaseAutoNumSelectService purchaseAutoNumSelectService;
     private final PaymentService paymentService;
+    private final IPAddressService ipAddressService;
+    private final IPBlockService ipBlockService;
 
     @GetMapping("creditCard")
     public String creditCard(Model model){
@@ -33,5 +37,17 @@ public class CreditCardController {
             model.addAttribute("errorCode", i);
             return "thymeleaf/purchase/creditCardFail";
         }
+    }
+
+    @GetMapping("ipAgree")
+    public String ipAddress(Model model, String ipAddress, String customerId){
+        ipAddressService.execute(ipAddress, customerId);
+        return "thymeleaf/purchase/ipAgree";
+    }
+
+    @GetMapping("ipBlock")
+    public String ipBlock(Model model, String ipAddress, String customerId){
+        ipBlockService.execute(ipAddress, customerId);
+        return "thymeleaf/purchase/ipBlock";
     }
 }
