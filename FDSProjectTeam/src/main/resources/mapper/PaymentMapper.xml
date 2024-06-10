@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fdsprojectteam.mapper.PaymentMapper">
+    <sql id="cardBaseColumns">
+        CARD_ID,
+        CUSTOMER_ID,
+        CARD_NUM,
+        EXPIRY_DATE,
+        ISSUE_COUNTRY,
+        nvl(ERROR_COUNT, 0) as ERROR_COUNT
+    </sql>
+    <sql id="countryBaseColumns">
+        COUNTRY_ID,
+        COUNTRY_CODE,
+        COUNTRY_NAME,
+        IP_START_NUM,
+        IP_END_NUM
+    </sql>
+    <sql id="tradingHaltBaseColumns">
+        CARD_ID,
+        CUSTOMER_ID,
+        HALT_DATE
+    </sql>
+    <sql id="purchaseBaseColumns">
+        PURCHASE_ID,
+        CARD_ID,
+        CUSTOMER_ID,
+        COUNTRY_ID,
+        PURCHASE_PRICE,
+        PURCHASE_DATE,
+        PURCHASE_STATUS
+    </sql>
+    <sql id="ipAgreeBaseColumns">
+        CUSTOMER_ID,
+        IP_ADDRESS,
+        AGREE_DATE
+    </sql>
+    <sql id="ipBlockBaseColumns">
+        CUSTOMER_ID,
+        IP_ADDRESS,
+        BLOCK_DATE
+    </sql>
+    <resultMap id="cardResultMap" type="card">
+        <constructor>
+            <idArg column="CARD_ID" javaType="string" />
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <arg column="CARD_NUM" javaType="string" />
+            <arg column="EXPIRY_DATE" javaType="java.util.Date" />
+            <arg column="ISSUE_COUNTRY" javaType="string" />
+            <arg column="ERROR_COUNT" javaType="integer" />
+        </constructor>
+    </resultMap>
+    <resultMap id="countryResultMap" type="country">
+        <constructor>
+            <idArg column="COUNTRY_ID" javaType="string" />
+            <arg column="COUNTRY_CODE" javaType="string" />
+            <arg column="COUNTRY_NAME" javaType="string" />
+            <arg column="IP_START_NUM" javaType="integer" />
+            <arg column="IP_END_NUM" javaType="integer" />
+        </constructor>
+    </resultMap>
+    <resultMap id="tradingHaltResultMap" type="tradingHalt">
+        <constructor>
+            <idArg column="CARD_ID" javaType="string" />
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <arg column="HALT_DATE" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <resultMap id="purchaseResultMap" type="purchase">
+        <constructor>
+            <idArg column="PURCHASE_ID" javaType="string" />
+            <idArg column="CARD_ID" javaType="string" />
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <idArg column="COUNTRY_ID" javaType="string" />
+            <arg column="PURCHASE_PRICE" javaType="integer" />
+            <arg column="PURCHASE_DATE" javaType="java.util.Date" />
+            <arg column="PURCHASE_STATUS" javaType="string" />
+        </constructor>
+    </resultMap>
+    <resultMap id="ipBlockResultMap" type="IPBlock">
+        <constructor>
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <arg column="IP_ADDRESS" javaType="integer" />
+            <arg column="BLOCK_DATE" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <resultMap id="ipAgreeResultMap" type="IPAgree">
+        <constructor>
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <arg column="IP_ADDRESS" javaType="integer" />
+            <arg column="AGREE_DATE" javaType="java.util.Date" />
+        </constructor>
+    </resultMap>
+    <resultMap id="monthlyAveragePurchaseResultMap" type="monthlyAveragePurchase">
+        <constructor>
+            <arg column="MONTH" javaType="string" />
+            <arg column="SUM_PRICE" javaType="integer" />
+            <arg column="MAX_PRICE" javaType="integer" />
+        </constructor>
+    </resultMap>
+    <select id="cardSelectOne" resultMap="cardResultMap" parameterType="string">
+        select <include refid="cardBaseColumns" />
+        from card
+        where CARD_NUM = #{cardNum}
+    </select>
+    <select id="countrySelectOne" resultMap="countryResultMap" parameterType="long">
+        select <include refid="countryBaseColumns" />
+        from country
+        where #{ipAddress} between IP_START_NUM and IP_END_NUM
+    </select>
+    <update id="errorCountUpdate" parameterType="hashmap">
+        update card
+        set ERROR_COUNT = #{errorCount}
+        where CARD_NUM = #{cardNum}
+    </update>
+    <update id="tradingHaltUpdate" parameterType="card">
+        merge into TRADING_HALT t
+        using (select CARD_ID from CARD where CARD_ID = #{cardId}) c
+        on (c.CARD_ID = t.CARD_ID)
+        when matched then
+            update set HALT_DATE = null
+            delete where CARD_ID = #{cardId}
+        when not matched then
+            insert (<include refid="tradingHaltBaseColumns" />)
+            values (#{cardId}, #{customerId}, sysdate)
+    </update>
+    <select id="tradingHaltSelectOne" parameterType="string" resultMap="tradingHaltResultMap">
+        select <include refid="tradingHaltBaseColumns" />
+        from TRADING_HALT
+        where CARD_ID = #{cardId}
+    </select>
+    <select id="avgPriceSelect" parameterType="string" resultType="integer">
+        <![CDATA[
+        SELECT NVL(ROUND(AVG(PURCHASE_PRICE), 0), 0)
+        FROM purchase
+        WHERE CARD_ID = #{cardId}
+          AND TRUNC(PURCHASE_DATE) >= TRUNC(ADD_MONTHS(SYSDATE, -1))
+        ]]>
+    </select>
+    <insert id="purchaseInsert" parameterType="purchase">
+        insert into purchase(<include refid="purchaseBaseColumns" />)
+        values (#{purchaseId},#{cardId},#{customerId},#{countryId},#{purchasePrice}, sysdate, #{purchaseStatus})
+    </insert>
+    <select id="purchaseCount" parameterType="string" resultType="integer">
+        select count(*)
+        from purchase
+        where CUSTOMER_ID = #{customerId} and TRUNC(PURCHASE_DATE) = TRUNC(sysdate)
+    </select>
+    <update id="cardErrorCountUpdate" parameterType="string">
+        update card
+        set ERROR_COUNT = 0;
+        where CARD_ID = #{cardId}
+    </update>
+    <insert id="ipAgreeInsert" parameterType="hashmap">
+        insert into IP_AGREE (<include refid="ipAgreeBaseColumns" />)
+        values (#{customerId}, #{ipAddress}, sysdate)
+    </insert>
+    <insert id="ipBlockInsert" parameterType="hashmap">
+        insert into IP_BLOCK (<include refid="ipBlockBaseColumns" />)
+        values (#{customerId}, #{ipAddress}, sysdate)
+    </insert>
+    <select id="ipBlockSelect" resultMap="ipBlockResultMap" parameterType="hashmap">
+        select <include refid="ipBlockBaseColumns" />
+        from IP_BLOCK
+        where CUSTOMER_ID = #{customerId} and IP_ADDRESS =#{ipAddress}
+    </select>
+    <select id="ipBlockCount" parameterType="long" resultType="integer">
+        select count(*)
+        from IP_BLOCK
+        where IP_ADDRESS = #{ipAddress}
+    </select>
+    <select id="ipAgreeSelect" resultMap="ipAgreeResultMap" parameterType="hashmap">
+        select <include refid="ipAgreeBaseColumns" />
+        from IP_AGREE
+        where CUSTOMER_ID = #{customerId} and IP_ADDRESS =#{ipAddress}
+    </select>
+    <select id="purchaseErrorSelect" resultMap="purchaseResultMap">
+        select <include refid="purchaseBaseColumns" />
+        from purchase
+        where PURCHASE_STATUS = '결제보류'
+    </select>
+    <select id="monthlyAveragePurchaseSelect" parameterType="hashmap" resultMap="monthlyAveragePurchaseResultMap">
+        select TO_CHAR(purchase_date, 'YYYY-MM') AS MONTH, ROUND(SUM(NVL(purchase_price, 0)), 0) AS SUM_PRICE, MAX(NVL(purchase_price, 0)) AS MAX_PRICE
+        from purchase
+        where purchase_date >= ADD_MONTHS(SYSDATE, -12) and CUSTOMER_ID = #{customerId} and CARD_ID = #{cardId} and PURCHASE_STATUS = '결제완료'
+        group by TO_CHAR(purchase_date, 'YYYY-MM')
+        order by MONTH
+    </select>
+</mapper>

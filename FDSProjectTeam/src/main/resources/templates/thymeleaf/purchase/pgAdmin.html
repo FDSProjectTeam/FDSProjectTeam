@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+관리자 페이지 입니다.
+
+<table align="center" border="1" width="600">
+    <caption>이상 거래 탐지 리스트</caption>
+    <tr>
+        <td>결제번호</td>
+        <td>카드번호</td>
+        <td>고객번호</td>
+    </tr>
+    <tr th:each="dto,idx : ${list}">
+        <td><a th:href="|/customerPage?purchaseId=${dto.purchaseId}&cardId=${dto.cardId}&customerId=${dto.customerId}|">[[${dto.purchaseId}]]</a></td>
+        <td><a th:href="|/customerPage?purchaseId=${dto.purchaseId}&cardId=${dto.cardId}&customerId=${dto.customerId}|">[[${dto.cardId}]]</a></td>
+        <td><a th:href="|/customerPage?purchaseId=${dto.purchaseId}&cardId=${dto.cardId}&customerId=${dto.customerId}|">[[${dto.customerId}]]</a></td>
+    </tr>
+</table>
+</body>
+</html>

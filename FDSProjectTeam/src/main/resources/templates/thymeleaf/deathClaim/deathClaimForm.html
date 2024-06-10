@@ -1,0 +1,57 @@
+<!--
+    사망보험 청구서를 입력받는 페이지입니다.
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>deathClaimForm.html</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+</head>
+<body>
+    <br />
+    <h3 style="text-align: center">사망보험 청구서</h3>
+    <br />
+    <table class="table table-borderless" style="text-align: right;">
+        <tr><th><a href="#">청구서 가져오기</a></th></tr>
+    </table>
+    <form action="deathClaimWrite" method="post">
+        <!-- 기존의 청구서를 가져오거나, 또는 직접 작성할 수 있게 기능을 구현했습니다. -->
+        <!-- 청구 번호는 자동부여 기능을 구현했습니다. -->
+        <table class="table table-borderless">
+            <tr><th>청구 번호<br />
+                <input type="text" class="form-control" name="claimNum" readonly="readonly"></th></tr>
+            <tr><th>청구 내용<br />
+                <textarea name="claimContent" class="form-control" rows="6" cols="40"></textarea></th></tr>
+            <tr><th>가입자 성명<br />
+                <input type="text" class="form-control" name="subName" /></th></tr>
+            <tr><th>청구인 성명<br />
+            <input type="text" class="form-control" name="claimName" /></th></tr>
+            <tr><th>청구인 생년월일<br />
+            <input type="date" class="form-control" name="claimName" /></th></tr>
+            <tr><th>청구인 주소<br />
+            <input type="text" class="form-control" name="claimAddr" /></th></tr>
+            <tr><th>청구인 상세주소<br />
+            <input type="text" class="form-control" name="claimAddrDetail" /></th></tr>
+            <tr><th>청구인 우편번호<br />
+            <input type="number" class="form-control" name="claimPost" /></th></tr>
+            <tr><th>청구인 이메일<br />
+            <input type="email" class="form-control" name="claimEmail" /></th></tr>
+            <tr><th>사망 원인<br />
+            <input type="text" class="form-control" name="causeOfDeath" /></th></tr>
+            <tr><th>사망일<br />
+            <input type="date" class="form-control" name="dateOfDeath" /></th></tr>
+            <tr><th>사망 장소<br />
+            <input type="text" class="form-control" name="placeOfDeath" /></th></tr>
+            <tr><th>사망의 종류<br />
+            <input type="text" class="form-control" name="typeOfDeath" /></th></tr>
+            <tr><th>보험금 수령 계좌<br />
+            <input type="text" class="form-control" name="beneficiaryAccount" /></th></tr>
+        </table>
+        <table class="table table-borderless" style="text-align: center;">
+            <tr><th><input type="submit" class="btn btn-outline-dark" value="확인">
+                    <button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button></th></tr>
+        </table>
+    </form>
+</body>
+</html>
