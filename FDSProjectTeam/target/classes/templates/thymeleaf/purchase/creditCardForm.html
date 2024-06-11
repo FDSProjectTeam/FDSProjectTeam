@@ -6,6 +6,7 @@
 </head>
 <body>
 <h2>결제 정보 입력</h2>
+<a href="/pgAdmin">관리자 페이지로 이동</a>
 <form action="/payment" method="post">
     결제 ID:<br>
     <input type="text" name="purchaseId" th:value="${purchaseCommand.purchaseId}" required><br><br>
