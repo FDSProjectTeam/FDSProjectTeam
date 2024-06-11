@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fdsprojectteam.mapper.InsuredMapper">
+	<sql id="insuredColumnBase">
+		INS_ID, INS_NAME, INS_BIRTH, INS_ADDR, INS_ADDR_DETAIL, INS_POST, INS_PHONE
+		,INS_EMAIL, INS_CASE_HISTORY, INS_BENEFICIARY, INS_PRIVITY, INS_BEN_PHONE, INS_CONTRACT_DATE
+	</sql>
+	<resultMap id="insuredResultMap" type="insured">
+		<constructor>
+			<idArg column="INS_ID" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_NAME" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_BIRTH" javaType="java.util.Date" jdbcType="DATE" />
+			<arg column="INS_ADDR" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_ADDR_DETAIL" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_POST" javaType="integer" jdbcType="BIGINT" />
+			<arg column="INS_PHONE" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_EMAIL" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_CASE_HISTORY" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_BENEFICIARY" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_PRIVITY" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_BEN_PHONE" javaType="string" jdbcType="VARCHAR" />
+			<arg column="INS_CONTRACT_DATE" javaType="java.util.Date" jdbcType="DATE" />
+		</constructor>
+	</resultMap>
+	<select id="selectOne" parameterType="string" resultMap="insuredResultMap">
+		SELECT <include refid="insuredColumnBase" />
+		FROM INSURED
+		WHERE INS_ID = #{insId}
+	</select>
+</mapper>
