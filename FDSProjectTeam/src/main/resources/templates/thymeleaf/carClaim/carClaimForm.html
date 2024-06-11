@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <title>carClaimForm.html</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+</head>
+<body>
+    <br />
+    <h3 style="text-align: center">자동차보험 청구서</h3>
+    <br />
+	<form  action="carClaimWrite" method="post">
+		<table class="table table-borderless">
+			<tr><th>청구번호<br />
+	               <input type="text" class="form-control"  name="claimNumber"></th></tr>
+			<tr><th>(피보험자)차량번호<br />
+	               <input type="text" class="form-control" name="memCarNumber" ></th></tr>
+			<tr><th>회원(피보험자)이름<br />
+	               <input type="text" class="form-control" name="claimName" ></th></tr>
+			<tr><th>회원(피보험자)차종<br />		
+	               <input type="text" class="form-control" name="claimCar" ></th></tr>
+			<tr><th>회원(피보험자)연락처<br />
+	               <input type="text" class="form-control" name="claimTel" ></th></tr>
+			<tr><th>면허번호<br />
+	               <input type="text" class="form-control" name="claimlicenseNumber" ></th></tr>
+			<tr><th>면허종류<br />
+	               <input type="text" class="form-control" name="claimLicenseType" ></th></tr>
+			<tr><th>사고일시<br />
+	               <input type="date" class="form-control" name="claimAccidentDate" ></th></tr>
+			<tr><th>사고장소<br />
+	               <input type="text" class="form-control" name="claimLocation" ></th></tr>
+			<tr><th>사고경위<br />
+	               <input type="text" class="form-control" name="claimSituation" ></th></tr>
+			<tr><th>탑승자인원수<br />
+	               <input type="number" class="form-control" name="claimCount" ></th></tr>
+			<tr><th>치료병원<br />
+	               <input type="text" class="form-control" name="claimHospital" ></th></tr>
+			<tr><th>청구인성명<br />
+	               <input type="text" class="form-control" name="claimSignName" ></th></tr>
+			<tr><th>청구인주소<br />
+	               <input type="text" class="form-control" name="claimAddr" ><br/>
+
+		</table>
+		        <table class="table table-borderless" style="text-align: center;">
+            <tr><th><input type="submit" class="btn btn-outline-dark" value="확인">
+                    <button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button></th></tr>
+        </table>
+	</form>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
