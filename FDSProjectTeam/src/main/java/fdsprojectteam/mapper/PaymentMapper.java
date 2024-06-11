@@ -39,4 +39,8 @@ public interface PaymentMapper {
     List<PurchaseDTO> purchaseErrorSelect();
 
     List<MonthlySumPurchaseDTO> monthlyAveragePurchaseSelect(Map<String, Object> result);
+
+    List<DailyPurchaseDTO> dailyPurchaseCountSelect(Map<String, Object> result);
+
+    List<PurchaseErrorDTO> fraudPaymentSelect(Map<String, Object> result);
 }

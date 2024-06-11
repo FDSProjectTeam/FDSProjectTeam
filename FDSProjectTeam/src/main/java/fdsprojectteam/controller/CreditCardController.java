@@ -19,6 +19,7 @@ public class CreditCardController {
     private final IPBlockService ipBlockService;
     private final PurchaseErrorListService purchaseErrorListService;
     private final CustomerDetailService customerDetailService;
+    private final ApprovePaymentService approvePaymentService;
 
     @GetMapping("creditCard")
     public String creditCard(Model model){
@@ -62,5 +63,11 @@ public class CreditCardController {
         MonthlytSumPurchaseCommand monthlytSumPurchaseCommand = customerDetailService.execute(model, customerId, purchaseId, cardId);
         model.addAttribute("monthlytAveragePurchaseCommand", monthlytSumPurchaseCommand);
         return "thymeleaf/purchase/customerPage";
+    }
+
+    @GetMapping("approvePayment")
+    public String approvePayment(Model model, String customerId, String purchaseId, String cardId){
+        approvePaymentService.execute(customerId, purchaseId, cardId);
+        return "redirect:/customerPage?purchaseId=" + purchaseId + "&cardId=" + cardId + "&customerId=" + customerId;
     }
 }
