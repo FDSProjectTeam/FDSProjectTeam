@@ -3,5 +3,67 @@
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="fdsprojectteam.mapper.DeathClaimMapper">
-
+    <sql id="deathClaimColumnBase">
+        CLAIM_NUM, INS_ID, CLAIM_CONTENT, CLAIM_NAME, CLAIM_BIRTH
+        ,CLAIM_ADDR, CLAIM_ADDR_DETAIL, CLAIM_POST, CLAIM_EMAIL
+        ,CAUSE_OF_DEATH, DATE_OF_DEATH, PLACE_OF_DEATH, TYPE_OF_DEATH
+        ,BENEFICIARY_ACCOUNT, CLAIM_DATE
+    </sql>
+    <resultMap id="deathClaimResultMap" type="deathClaim">
+        <constructor>
+            <idArg column="CLAIM_NUM" javaType="string" jdbcType="VARCHAR" />
+            <idArg column="INS_ID" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_CONTENT" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_NAME" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_BIRTH" javaType="java.util.Date" />
+            <arg column="CLAIM_ADDR" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_ADDR_DETAIL" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_POST" javaType="integer" jdbcType="BIGINT" />
+            <arg column="CLAIM_EMAIL" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CAUSE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
+            <arg column="DATE_OF_DEATH" javaType="java.util.Date" />
+            <arg column="PLACE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
+            <arg column="TYPE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
+            <arg column="BENEFICIARY_ACCOUNT" javaType="string" jdbcType="VARCHAR" />
+            <arg column="CLAIM_DATE" javaType="java.util.Date" jdbcType="DATE" />
+        </constructor>
+    </resultMap>
+    <select id="allSelect" resultMap="deathClaimResultMap">
+        SELECT * FROM (
+                      SELECT ROW_NUMBER() OVER (ORDER BY CLAIM_NUM DESC) as rn,
+                      <include refid="deathClaimColumnBase" />
+                      FROM DEATH_CLAIM
+                      <where>
+                          <if test="searchWord != null">
+                              CLAIM_NUM LIKE '%' || #{searchWord} || '%'
+                              OR CLAIM_NAME LIKE '%' || #{searchWord} || '%'
+                          </if>
+                      </where>
+                      )
+        WHERE rn BETWEEN #{startRow} AND #{endRow}
+    </select>
+    <select id="selectOne" parameterType="string" resultMap="deathClaimResultMap">
+        SELECT <include refid="deathClaimColumnBase" />
+        FROM DEATH_CLAIM
+        WHERE CLAIM_NUM = #{claimNum}
+    </select>
+    <select id="selectCount" resultType="deathClaimCount">
+        SELECT CAUSE_OF_DEATH as causeOfDeath, COUNT(*) as totalCount
+        FROM DEATH_CLAIM
+        GROUP BY CAUSE_OF_DEATH
+    </select>
+    <select id="selectPlaceCount" resultType="deathClaimPlaceCount">
+        SELECT PLACE_OF_DEATH as placeOfDeath, COUNT(*) as placeOfDeathCount
+        FROM DEATH_CLAIM
+        GROUP BY PLACE_OF_DEATH
+    </select>
+    <select id="deathClaimCount" parameterType="string" resultType="integer">
+        SELECT COUNT(*) FROM DEATH_CLAIM
+        <where>
+            <if test="searchWord != null">
+                CLAIM_NUM like '%' || #{searchWord} || '%'
+                OR CLAIM_NAME like '%' || #{searchWord} || '%'
+            </if>
+        </where>
+    </select>
 </mapper>
