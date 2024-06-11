@@ -8,10 +8,8 @@ import org.apache.ibatis.type.Alias;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Alias("monthlyAveragePurchase")
-public class MonthlySumPurchaseDTO {
-    private String month;
-    private Integer sumPrice;
-    private Integer maxPrice;
-    private Integer purchaseCount;
+@Alias("dailyPurchase")
+public class DailyPurchaseDTO {
+    private String day;
+    private
 }

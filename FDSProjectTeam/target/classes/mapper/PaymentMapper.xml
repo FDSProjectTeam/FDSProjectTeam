@@ -98,6 +98,7 @@
             <arg column="MONTH" javaType="string" />
             <arg column="SUM_PRICE" javaType="integer" />
             <arg column="MAX_PRICE" javaType="integer" />
+            <arg column="PURCHASE_COUNT" javaType="integer" />
         </constructor>
     </resultMap>
     <select id="cardSelectOne" resultMap="cardResultMap" parameterType="string">
@@ -182,10 +183,28 @@
         where PURCHASE_STATUS = '결제보류'
     </select>
     <select id="monthlyAveragePurchaseSelect" parameterType="hashmap" resultMap="monthlyAveragePurchaseResultMap">
-        select TO_CHAR(purchase_date, 'YYYY-MM') AS MONTH, ROUND(SUM(NVL(purchase_price, 0)), 0) AS SUM_PRICE, MAX(NVL(purchase_price, 0)) AS MAX_PRICE
-        from purchase
-        where purchase_date >= ADD_MONTHS(SYSDATE, -12) and CUSTOMER_ID = #{customerId} and CARD_ID = #{cardId} and PURCHASE_STATUS = '결제완료'
-        group by TO_CHAR(purchase_date, 'YYYY-MM')
-        order by MONTH
+        <![CDATA[
+        WITH months AS (
+            SELECT TO_CHAR(ADD_MONTHS(TRUNC(SYSDATE, 'MM'), LEVEL - 12), 'YYYY-MM') AS MONTH
+            FROM DUAL
+            CONNECT BY LEVEL <= 12
+            )
+        SELECT
+            m.MONTH,
+            ROUND(SUM(CASE WHEN p.purchase_price IS NULL THEN 0 ELSE p.purchase_price END), 0) AS SUM_PRICE,
+            MAX(CASE WHEN p.purchase_price IS NULL THEN 0 ELSE p.purchase_price END) AS MAX_PRICE,
+            NVL(COUNT(PURCHASE_ID),0) AS PURCHASE_COUNT
+        FROM
+            months m
+                LEFT JOIN purchase p
+                ON TO_CHAR(p.purchase_date, 'YYYY-MM') = m.MONTH
+                    AND p.CUSTOMER_ID = #{customerId}
+                    AND p.CARD_ID = #{cardId}
+                    AND p.PURCHASE_STATUS = '결제완료'
+        GROUP BY
+            m.MONTH
+        ORDER BY
+            m.MONTH
+        ]]>
     </select>
 </mapper>

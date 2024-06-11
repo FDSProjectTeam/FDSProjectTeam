@@ -38,6 +38,10 @@ public class CustomerDetailService {
                 .map(MonthlySumPurchaseDTO::getMaxPrice)
                 .collect(Collectors.toList());
 
-        return new MonthlytSumPurchaseCommand(months, sumPrices, maxPrices);
+        List<Integer> purchaseCount = purchases.stream()
+                .map(MonthlySumPurchaseDTO::getPurchaseCount)
+                .collect(Collectors.toList());
+
+        return new MonthlytSumPurchaseCommand(months, sumPrices, maxPrices, purchaseCount);
     }
 }
