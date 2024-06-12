@@ -11,5 +11,5 @@ import org.apache.ibatis.type.Alias;
 @Alias("dailyPurchase")
 public class DailyPurchaseDTO {
     private String day;
-    private
+    private Integer dailyCount;
 }

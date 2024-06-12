@@ -14,4 +14,6 @@ public class MonthlytSumPurchaseCommand {
     private List<Integer> sumPrices;
     private List<Integer> maxPrices;
     private List<Integer> purchaseCount;
+    private List<String> days;
+    private List<Integer> dailyCount;
 }

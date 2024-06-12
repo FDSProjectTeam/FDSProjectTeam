@@ -52,6 +52,18 @@
             <arg column="ERROR_COUNT" javaType="integer" />
         </constructor>
     </resultMap>
+    <resultMap id="customersResultMap" type="customers">
+        <constructor>
+            <idArg column="CUSTOMER_ID" javaType="string" />
+            <arg column="CUSTOMER_NAME" javaType="string" />
+            <arg column="CUSTOMER_EMAIL" javaType="string" />
+            <arg column="CUSTOMER_PHONE" javaType="string" />
+            <arg column="CUSTOMER_ADDR" javaType="string" />
+            <arg column="CUSTOMER_ADDR_DETAIL" javaType="string" />
+            <arg column="CUSTOMER_POST" javaType="string" />
+            <arg column="CUSTOMER_COUNTRY" javaType="string" />
+        </constructor>
+    </resultMap>
     <resultMap id="countryResultMap" type="country">
         <constructor>
             <idArg column="COUNTRY_ID" javaType="string" />
@@ -100,6 +112,17 @@
             <arg column="MAX_PRICE" javaType="integer" />
             <arg column="PURCHASE_COUNT" javaType="integer" />
         </constructor>
+    </resultMap>
+    <resultMap id="dailyPurchaseResultMap" type="dailyPurchase">
+        <constructor>
+            <arg column="DAY" javaType="string" />
+            <arg column="DAILY_COUNT" javaType="integer" />
+        </constructor>
+    </resultMap>
+    <resultMap id="purchaseErrorResultMap" type="purchaseError">
+        <association property="purchaseDTO" javaType="purchase" resultMap="purchaseResultMap" />
+        <association property="customersDTO" javaType="customers" resultMap="customersResultMap" />
+        <association property="cardDTO" javaType="card" resultMap="cardResultMap" />
     </resultMap>
     <select id="cardSelectOne" resultMap="cardResultMap" parameterType="string">
         select <include refid="cardBaseColumns" />
@@ -151,7 +174,7 @@
     </select>
     <update id="cardErrorCountUpdate" parameterType="string">
         update card
-        set ERROR_COUNT = 0;
+        set ERROR_COUNT = 0
         where CARD_ID = #{cardId}
     </update>
     <insert id="ipAgreeInsert" parameterType="hashmap">
@@ -207,4 +230,44 @@
             m.MONTH
         ]]>
     </select>
+    <select id="dailyPurchaseCountSelect" resultMap="dailyPurchaseResultMap" parameterType="hashmap">
+        <![CDATA[
+        WITH dates AS (
+            SELECT TO_CHAR(TRUNC(SYSDATE) - (ROWNUM - 1), 'YYYY-MM-DD') AS DAY
+        FROM DUAL
+        CONNECT BY ROWNUM <= ADD_MONTHS(TRUNC(SYSDATE), 1) - TRUNC(SYSDATE)
+            )
+        SELECT
+            d.DAY,
+            COUNT(p.PURCHASE_ID) AS DAILY_COUNT
+        FROM
+            dates d
+                LEFT JOIN purchase p
+                          ON TO_CHAR(p.purchase_date, 'YYYY-MM-DD') = d.DAY
+                              AND p.CUSTOMER_ID = #{customerId}
+                              AND p.CARD_ID = #{cardId}
+                              AND p.PURCHASE_STATUS = '결제완료'
+        GROUP BY
+            d.DAY
+        ORDER BY
+            d.DAY
+        ]]>
+    </select>
+    <select id="fraudPaymentSelect" parameterType="hashmap" resultMap="purchaseErrorResultMap">
+        select cus.CUSTOMER_ID, CUSTOMER_NAME, CUSTOMER_EMAIL, CUSTOMER_PHONE, CUSTOMER_ADDR, CUSTOMER_ADDR_DETAIL, CUSTOMER_POST, CUSTOMER_COUNTRY,
+               car.CARD_ID, CARD_NUM, EXPIRY_DATE, ISSUE_COUNTRY, ERROR_COUNT,
+               PURCHASE_ID, COUNTRY_ID, PURCHASE_PRICE, PURCHASE_DATE, PURCHASE_STATUS
+        from CUSTOMERS cus left outer join CARD car
+        on cus.CUSTOMER_ID = car.CUSTOMER_ID left outer join PURCHASE pur
+        on car.CARD_ID = pur.CARD_ID and car.CUSTOMER_ID = pur.CUSTOMER_ID
+        where PURCHASE_STATUS = '결제보류' and cus.CUSTOMER_ID = #{customerId} and car.CARD_ID = #{cardId}
+    </select>
+    <update id="purchaseStatusUpdate" parameterType="hashmap">
+        update purchase
+        set PURCHASE_STATUS = '결제완료'
+        where CUSTOMER_ID = #{customerId} and PURCHASE_ID = #{purchaseId} and CARD_ID = #{cardId}
+    </update>
+    <delete id="purchaseDelete" parameterType="hashmap">
+        delete from purchase where CUSTOMER_ID = #{customerId} and PURCHASE_ID = #{purchaseId} and CARD_ID = #{cardId}
+    </delete>
 </mapper>

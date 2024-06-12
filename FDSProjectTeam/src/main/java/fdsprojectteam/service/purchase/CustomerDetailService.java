@@ -1,7 +1,9 @@
 package fdsprojectteam.service.purchase;
 
 import fdsprojectteam.command.MonthlytSumPurchaseCommand;
+import fdsprojectteam.domain.DailyPurchaseDTO;
 import fdsprojectteam.domain.MonthlySumPurchaseDTO;
+import fdsprojectteam.domain.PurchaseErrorDTO;
 import fdsprojectteam.mapper.PaymentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ public class CustomerDetailService {
         result.put("purchaseId", purchaseId);
         result.put("cardId", cardId);
         List<MonthlySumPurchaseDTO> purchases = paymentMapper.monthlyAveragePurchaseSelect(result);
+        List<DailyPurchaseDTO> dailyPurchase = paymentMapper.dailyPurchaseCountSelect(result);
+        List<PurchaseErrorDTO> purchaseError = paymentMapper.fraudPaymentSelect(result);
 
         List<String> months = purchases.stream()
                 .map(MonthlySumPurchaseDTO::getMonth)
@@ -42,6 +46,16 @@ public class CustomerDetailService {
                 .map(MonthlySumPurchaseDTO::getPurchaseCount)
                 .collect(Collectors.toList());
 
-        return new MonthlytSumPurchaseCommand(months, sumPrices, maxPrices, purchaseCount);
+        List<String> days = dailyPurchase.stream()
+                .map(DailyPurchaseDTO::getDay)
+                .map(day -> "\"" + day + "\"")
+                .collect(Collectors.toList());
+
+        List<Integer> dailyCount = dailyPurchase.stream()
+                .map(DailyPurchaseDTO::getDailyCount)
+                .collect(Collectors.toList());
+
+        model.addAttribute("purchaseErrorCommand", purchaseError);
+        return new MonthlytSumPurchaseCommand(months, sumPrices, maxPrices, purchaseCount, days, dailyCount);
     }
 }
