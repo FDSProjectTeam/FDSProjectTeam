@@ -111,7 +111,7 @@
         <td>[[${#dates.format(dto.purchaseDTO.purchaseDate, 'yyyy-MM-dd')}]]</td>
         <td>[[${dto.customersDTO.customerPhone}]]</td>
         <td align="center"><button th:attr="onclick=|approvePayment('${dto.purchaseDTO.purchaseId}','${dto.cardDTO.cardId}','${dto.customersDTO.customerId}')|">결제 승인</button></td>
-        <td align="center"><button th:attr="onclick=|cancelPayment('${dto.purchaseDTO.purchaseId}','${dto.cardDTO.cardId}'),'${dto.customersDTO.customerId}')|">결제 취소</button></td>
+        <td align="center"><button th:attr="onclick=|cancelPayment('${dto.purchaseDTO.purchaseId}','${dto.cardDTO.cardId}','${dto.customersDTO.customerId}')|">결제 취소</button></td>
     </tr>
 </table>
 </body>

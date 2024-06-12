@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class ApprovePaymentService {
+public class CancelPaymentService {
 
     private final PaymentMapper paymentMapper;
 
@@ -18,7 +18,6 @@ public class ApprovePaymentService {
         result.put("customerId", customerId);
         result.put("purchaseId", purchaseId);
         result.put("cardId", cardId);
-        paymentMapper.purchaseStatusUpdate(result);
-        paymentMapper.cardErrorCountUpdate(cardId);
+        paymentMapper.purchaseDelete(result);
     }
 }

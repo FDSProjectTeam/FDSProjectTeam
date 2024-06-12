@@ -43,4 +43,8 @@ public interface PaymentMapper {
     List<DailyPurchaseDTO> dailyPurchaseCountSelect(Map<String, Object> result);
 
     List<PurchaseErrorDTO> fraudPaymentSelect(Map<String, Object> result);
+
+    void purchaseStatusUpdate(Map<String, Object> result);
+
+    void purchaseDelete(Map<String, Object> result);
 }

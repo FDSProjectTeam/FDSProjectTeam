@@ -174,7 +174,7 @@
     </select>
     <update id="cardErrorCountUpdate" parameterType="string">
         update card
-        set ERROR_COUNT = 0;
+        set ERROR_COUNT = 0
         where CARD_ID = #{cardId}
     </update>
     <insert id="ipAgreeInsert" parameterType="hashmap">
@@ -261,6 +261,13 @@
         on cus.CUSTOMER_ID = car.CUSTOMER_ID left outer join PURCHASE pur
         on car.CARD_ID = pur.CARD_ID and car.CUSTOMER_ID = pur.CUSTOMER_ID
         where PURCHASE_STATUS = '결제보류' and cus.CUSTOMER_ID = #{customerId} and car.CARD_ID = #{cardId}
-
     </select>
+    <update id="purchaseStatusUpdate" parameterType="hashmap">
+        update purchase
+        set PURCHASE_STATUS = '결제완료'
+        where CUSTOMER_ID = #{customerId} and PURCHASE_ID = #{purchaseId} and CARD_ID = #{cardId}
+    </update>
+    <delete id="purchaseDelete" parameterType="hashmap">
+        delete from purchase where CUSTOMER_ID = #{customerId} and PURCHASE_ID = #{purchaseId} and CARD_ID = #{cardId}
+    </delete>
 </mapper>
