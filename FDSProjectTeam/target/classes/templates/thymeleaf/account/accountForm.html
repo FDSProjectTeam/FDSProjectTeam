@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+</head>
+<body>
+<h3 style="text-align: center">계좌정보 입력</h3>
+<form action="accountCheck" method="post">
+	<table class="table table-borderless">
+		<tr><th>계좌번호<br /><input type="text" class="form-control" name="accountNum" required="required"/></th></tr>
+		<tr><th>고객성함<br /><input type="text" class="form-control" name="accmemName" required="required"/></th></tr>
+		<tr><th>고객번호<br /><input type="text" class="form-control" name="accmemNum" required="required"/></th></tr>
+	</table>
+	<table class="table table-borderless" style="text-align: center;">
+		<tr><th>
+			<input type="submit" class="btn btn-outline-dark" value="확인">
+	    	<button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button>
+		</th></tr>
+	</table>
+</form>
+</body>
+</html>
