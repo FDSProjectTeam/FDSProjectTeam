@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Account Chart</title>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script th:inline="javascript">
+        function drawChart() {
+            var chartDataString = [[${chartData}]];
+            console.log(chartDataString);
+           // var dataArray = eval(chartDataString);
+            var data = new google.visualization.DataTable(chartDataString);
+           // data.addColumn('string', 'Date');
+           // data.addColumn('number', 'Price');
+           // data.addColumn({type: 'string', role: 'style'});
+           // data.addRows(dataArray);
+            var options = {
+                title: 'Account Chart',
+                width: 800,
+                height: 600
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+    </script>
+</head>
+<body>
+    <h2>Account Chart</h2>
+    <div id="chart_div"></div>
+</body>
+</html>
