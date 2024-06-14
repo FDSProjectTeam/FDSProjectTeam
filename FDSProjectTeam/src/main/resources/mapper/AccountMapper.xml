@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="fdsprojectteam.mapper.AccountMapper">
+    <resultMap id="accountResultMap" type="account">
+        <constructor>
+            <idArg column="ACCOUNT_NUM" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_NUM" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCOUNT_DATE" javaType="java.util.Date" jdbcType="DATE" />
+        </constructor>
+    </resultMap>
+
+    <resultMap id="accmemberResultMap" type="accmember">
+        <constructor>
+            <idArg column="ACCMEM_NUM" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_NAME" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_ADDR" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_DETAIL" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_POST" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_TEL" javaType="string" jdbcType="VARCHAR" />
+            <arg column="ACCMEM_BIRTH" javaType="java.util.Date" jdbcType="DATE" />
+        </constructor>
+    </resultMap>
+
+    <resultMap id="transferInfoResultMap" type="transferInfo">
+            <id column="TRANSFER_NUM" javaType="string" jdbcType="VARCHAR" property="transferNum"/>
+            <result column="ACCMEM_NUM" javaType="string" jdbcType="VARCHAR" property="accmemNum"/>
+            <result column="ACCOUNT_NUM" javaType="string" jdbcType="VARCHAR" property="accountNum"/>
+            <result column="INCOME_PRICE" javaType="integer" jdbcType="BIGINT" property="incomePrice"/>
+            <result column="INCOME_DATE" javaType="java.util.Date" jdbcType="DATE" property="incomeDate"/>
+            <result column="OUTCOME_PRICE" javaType="integer" jdbcType="BIGINT" property="outcomePrice"/>
+            <result column="OUTCOME_DATE" javaType="java.util.Date" jdbcType="DATE" property="outcomeDate"/>
+            <result column="TRANSFER_CONTENT" javaType="string" jdbcType="VARCHAR" property="transferContent"/>
+    </resultMap>
+
+    <resultMap id="accountMemberResultMap" type="accountMember">
+        <association property="accmemberDTO" javaType="accmember" resultMap="accmemberResultMap"/>
+        <association property="accountDTO" javaType="account" resultMap="accountResultMap"/>
+    </resultMap>
+
+    <select id="accountMemberSelect" resultMap="accountMemberResultMap" parameterType="map">
+        select m.ACCMEM_NUM, ACCMEM_NAME, ACCMEM_ADDR, ACCMEM_DETAIL, ACCMEM_POST, ACCMEM_TEL, ACCMEM_BIRTH,
+               ACCOUNT_NUM, ACCOUNT_DATE
+        from accmembers m join account a
+        on m.accmem_num = a.accmem_num
+        where ACCOUNT_NUM = #{accountNum} and ACCMEM_NAME = #{accmemName} and m.ACCMEM_NUM = #{accmemNum}
+    </select>
+
+    <select id="transferInfoList" resultMap="transferInfoResultMap" parameterType="string">
+        select TRANSFER_NUM , ACCMEM_NUM, ACCOUNT_NUM, nvl(INCOME_PRICE,0) income_Price,
+               nvl(INCOME_DATE, TO_DATE('9999-01-01', 'YYYY-MM-DD')) income_date, nvl(OUTCOME_PRICE,0) outcome_Price, 
+               nvl(OUTCOME_DATE, TO_DATE('9999-01-01', 'YYYY-MM-DD')) outcome_date, TRANSFER_CONTENT
+        from transferInfo
+        where ACCOUNT_NUM = #{accountNum}
+    </select>
+
+</mapper>
