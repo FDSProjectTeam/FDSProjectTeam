@@ -1,0 +1,98 @@
+<!--
+    사망보험에 관한 미리 정해놓은 시나리오에 의해 결과값이 출력되는 페이지입니다.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>deathClaimResult.html</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+    <style>
+        .layout{
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 1em;
+        }
+        aside{
+            flex-basis: 260px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: 10px;
+            font-size: 18px;
+            line-height: 210%;
+            background-color: white;
+        }
+        article{
+            flex-basis: 880px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            border-bottom: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">FDSProjectTeam</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="deathClaimChart">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Claims</a>
+                </li>
+            </ul>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav2">
+            관리자 페이지
+        </div>
+    </nav>
+    <div class="layout">
+        <aside>
+            <a href="deathClaimList">청구서 목록</a><br />
+            <a href="deathClaimChart">통계 및 분석</a><br />
+            <a href="#">지급 거부 통계</a><br />
+            <a href="#">리포트</a><br />
+        </aside>
+        <article>
+            <h3 style="text-align: center">사망보험</h3>
+            <h3 style="text-align: center">부당 지급 확인 결과</h3>
+            <br />
+            <table class="table table-bordered table-hover" style="text-align: center;">
+                <tr><th>청구번호</th><td>[[${deathClaimCommand.claimNum }]]</td></tr>
+                <tr><th>가입자성명</th><td>[[${insName }]]</td></tr>
+                <tr><th>청구인성명</th><td>[[${deathClaimCommand.claimName }]]</td></tr>
+                <tr><th>청구인 생년월일</th><td>[[${#dates.format(deathClaimCommand.claimBirth, 'yyyy-MM-dd') }]]</td></tr>
+                <tr><th>청구인 주소</th><td>[[${deathClaimCommand.claimAddr }]]</td></tr>
+                <tr><th>청구인 상세주소</th><td>[[${deathClaimCommand.claimAddrDetail }]]</td></tr>
+                <tr><th>청구인 우편번호</th><td>[[${deathClaimCommand.claimPost }]]</td></tr>
+                <tr><th>청구인 이메일</th><td>[[${deathClaimCommand.claimEmail }]]</td></tr>
+                <tr><th>사망 원인</th><td>[[${deathClaimCommand.causeOfDeath }]]</td></tr>
+                <tr><th>사망일</th><td>[[${#dates.format(deathClaimCommand.dateOfDeath,'yyyy-MM-dd') }]]</td></tr>
+                <tr><th>사망 장소</th><td>[[${deathClaimCommand.placeOfDeath }]]</td></tr>
+                <!-- <tr><th>사망의 종류</th><td>[[${deathClaimCommand.typeOfDeath }]]</td></tr> -->
+                <tr><th>보험금 수령 계좌</th><td>[[${deathClaimCommand.beneficiaryAccount }]]</td></tr>
+                <!-- 시나리오에 의해 지급 거부가 되면 거부 사유가 출력되도록 기능을 구현했습니다. -->
+                <tr><th colspan="2">
+                    <span th:if="!${#strings.isEmpty(accepted)}" style="color: green; font-size: large;">지급 승인</span>
+                    <span th:if="!${#strings.isEmpty(denied)}" style="color: red; font-size: xx-large">지급 거부</span>
+                <th:block th:if="!${#strings.isEmpty(denied)}">
+                    <br />사유 : [[${denied }]]</th></tr>
+                </th:block>
+            </table>
+            <table class="table table-borderless" style="text-align: center;">
+                <tr><th><button type="button" class="btn btn-outline-dark" onclick="javascript:location.href='deathClaimChart'">홈으로</button></th></tr>
+            </table>
+        </article>
+    </div>
+</body>
+</html>
