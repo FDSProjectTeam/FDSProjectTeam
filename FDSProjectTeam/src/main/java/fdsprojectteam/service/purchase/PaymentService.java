@@ -64,7 +64,7 @@ public class PaymentService {
                     purchaseInsert(purchaseCommand, cardDTO, countryDTO, dto, "결제보류");
                     model.addAttribute("errorMessage", "비정상적인 거래금액입니다.");
                     answer = 2;
-                }else if(purchaseCount > 30) {
+                }else if(purchaseCount > 10) {
                     updateErrorCount(cardDTO);
 
                     model.addAttribute("errorMessage", "비정상적인 거래 횟수입니다.");
@@ -83,7 +83,12 @@ public class PaymentService {
             }
         }else {// IP정보가 잘못되었을때. 또는 거래 정지 카드일 경우.
             TradingHaltDTO tradingHaltDTO = paymentMapper.tradingHaltSelectOne(purchaseCommand.getCardNum());
-            model.addAttribute("tradingHaltCommand", tradingHaltDTO);
+            if(tradingHaltDTO == null) {
+                model.addAttribute("errorMessage", "거래 정지 카드입니다.");
+                model.addAttribute("tradingHaltCommand", tradingHaltDTO);
+            }else {
+                model.addAttribute("errorMessage", "잘못된 IP로 접근하였습니다.");
+            }
             answer = 1;
         }
         return answer;
