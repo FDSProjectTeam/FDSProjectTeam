@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
 </head>
 <body>
-관리자 페이지 입니다.
-
-<table align="center" border="1" width="600">
-    <caption>이상 거래 탐지 리스트</caption>
-    <tr>
-        <td>결제번호</td>
-        <td>카드번호</td>
-        <td>고객번호</td>
-    </tr>
+<a href="/">홈</a>
+<h2 style="text-align: center;">이상 거래 탐지 고객 리스트</h2>
+<table border="1" align="center" class="table">
+    <thead>
+        <tr>
+            <th scope="col">결제번호</th>
+            <th scope="col">카드번호</th>
+            <th scope="col">고객번호</th>
+        </tr>
+    </thead>
     <tr th:each="dto,idx : ${list}">
         <td><a th:href="|/customerPage?purchaseId=${dto.purchaseId}&cardId=${dto.cardId}&customerId=${dto.customerId}|">[[${dto.purchaseId}]]</a></td>
         <td><a th:href="|/customerPage?purchaseId=${dto.purchaseId}&cardId=${dto.cardId}&customerId=${dto.customerId}|">[[${dto.cardId}]]</a></td>

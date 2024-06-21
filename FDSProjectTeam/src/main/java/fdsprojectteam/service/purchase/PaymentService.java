@@ -52,20 +52,20 @@ public class PaymentService {
                 PurchaseDTO dto = new PurchaseDTO();
 
                 if(!Objects.equals(countryDTO.getCountryCode(), cardDTO.getIssueCountry()) && ipAgreeDTO == null) { // 고객의 결제 지역과 해당 카드의 발급 국가를 비교하여 불일치가 발생할 경우
-                    updateErrorCount(cardDTO);
+                    updateErrorCount(cardDTO, model);
 
                     model.addAttribute("purchaseCommand", purchaseCommand);
                     model.addAttribute("errorMessage", "다른 국가에서 결제 시도가 있었습니다.");
                     answer = 2;
                 }else if((avgPrice < 1000000 && purchaseCommand.getPurchasePrice() >= 1000000) ||
                         (avgPrice >= 1000000 && (avgPrice * 2 <= purchaseCommand.getPurchasePrice() && purchaseCommand.getPurchasePrice() <= 10000000))) {
-                    updateErrorCount(cardDTO);
+                    updateErrorCount(cardDTO, model);
 
                     purchaseInsert(purchaseCommand, cardDTO, countryDTO, dto, "결제보류");
                     model.addAttribute("errorMessage", "비정상적인 거래금액입니다.");
                     answer = 2;
                 }else if(purchaseCount > 10) {
-                    updateErrorCount(cardDTO);
+                    updateErrorCount(cardDTO, model);
 
                     model.addAttribute("errorMessage", "비정상적인 거래 횟수입니다.");
                     answer = 2;
@@ -83,7 +83,7 @@ public class PaymentService {
             }
         }else {// IP정보가 잘못되었을때. 또는 거래 정지 카드일 경우.
             TradingHaltDTO tradingHaltDTO = paymentMapper.tradingHaltSelectOne(purchaseCommand.getCardNum());
-            if(tradingHaltDTO == null) {
+            if(tradingHaltDTO != null) {
                 model.addAttribute("errorMessage", "거래 정지 카드입니다.");
                 model.addAttribute("tradingHaltCommand", tradingHaltDTO);
             }else {
@@ -93,8 +93,10 @@ public class PaymentService {
         }
         return answer;
     }
-    private void updateErrorCount(CardDTO cardDTO) {
+    private void updateErrorCount(CardDTO cardDTO, Model model) {
         int newErrorCount = cardDTO.getErrorCount() + 1;
+        System.out.println(newErrorCount);
+        model.addAttribute("errorCount", newErrorCount);
         Map<String, Object> map = new HashMap<>();
         map.put("errorCount", newErrorCount);
         map.put("cardNum", cardDTO.getCardNum());
