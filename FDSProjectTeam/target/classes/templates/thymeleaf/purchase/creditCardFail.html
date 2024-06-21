@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
 </head>
 <body>
-결제 실패 페이지 입니다.<br />
+<a href="/">홈</a>
+<h2 style="text-align: center;">결제 실패</h2>
+<div align="center">
 errorCode : [[${errorCode}]] <br />
 <th:block th:if="${errorCode == 2}">
     errorCount : [[${errorCount}]] <br />
@@ -18,15 +21,19 @@ errorCode : [[${errorCode}]] <br />
 
 </th:block>
 <th:block th:if="${errorCode == 1}">
-    errorCount : [[${errorCount}]] <br />
     errorMessage : [[${errorMessage}]] <br />
     <th:block th:if="${tradingHaltCommand != null}">
         정지 사유 : 결제오류 5회 이상
         정지 날짜 : [[${#dates.format(tradingHaltCommand.haltedDate, 'yyyy-MM-dd')}]]
     </th:block>
+    <th:block th:if="${tradingHaltCommand == null}">
+        결제를 다시 시도하여 주시기 바랍니다.
+        <button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button>
+    </th:block>
 </th:block>
 <br />
 고객센터에 연락주셔서 인증절차를 밟아주시길 바랍니다.<br />
 1234-5678
+</div>
 </body>
 </html>
