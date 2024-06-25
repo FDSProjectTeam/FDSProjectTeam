@@ -9,6 +9,18 @@
         ,CAUSE_OF_DEATH, DATE_OF_DEATH, PLACE_OF_DEATH, TYPE_OF_DEATH
         ,BENEFICIARY_ACCOUNT, CLAIM_DATE
     </sql>
+    <sql id="deniedListColumnBase">
+        DENIED_NUM, CLAIM_NUM, REASON_FOR_DENIED, DENIED_DATE
+    </sql>
+    <sql id="deathClaimReportColumnBase">
+        REPORT_NUM, REPORT_SUBJECT, REPORT_CONTENT, REPORT_DATE
+    </sql>
+    <sql id="deniedListAutoNum">
+        SELECT CONCAT('DEN', NVL(MAX(TO_NUMBER(SUBSTR(DENIED_NUM, 4))), 100000) + 1) FROM DENIED_LIST
+    </sql>
+    <sql id="deathClaimReportAutoNum">
+        SELECT CONCAT('REP', NVL(MAX(TO_NUMBER(SUBSTR(REPORT_NUM, 4))), 100000) + 1) FROM DEATH_CLAIM_REPORT
+    </sql>
     <resultMap id="deathClaimResultMap" type="deathClaim">
         <constructor>
             <idArg column="CLAIM_NUM" javaType="string" jdbcType="VARCHAR" />
@@ -26,6 +38,22 @@
             <arg column="TYPE_OF_DEATH" javaType="string" jdbcType="VARCHAR" />
             <arg column="BENEFICIARY_ACCOUNT" javaType="string" jdbcType="VARCHAR" />
             <arg column="CLAIM_DATE" javaType="java.util.Date" jdbcType="DATE" />
+        </constructor>
+    </resultMap>
+    <resultMap id="deniedListResultMap" type="deniedList">
+        <constructor>
+            <idArg column="DENIED_NUM" javaType="string" jdbcType="VARCHAR" />
+            <idArg column="CLAIM_NUM" javaType="string" jdbcType="VARCHAR" />
+            <arg column="REASON_FOR_DENIED" javaType="string" jdbcType="VARCHAR" />
+            <arg column="DENIED_DATE" javaType="java.util.Date" jdbcType="DATE" />
+        </constructor>
+    </resultMap>
+    <resultMap id="deathClaimReportResultMap" type="deathClaimReport">
+        <constructor>
+            <idArg column="REPORT_NUM" javaType="string" jdbcType="VARCHAR" />
+            <arg column="REPORT_SUBJECT" javaType="string" jdbcType="VARCHAR" />
+            <arg column="REPORT_CONTENT" javaType="string" jdbcType="VARCHAR" />
+            <arg column="REPORT_DATE" javaType="java.util.Date" jdbcType="DATE" />
         </constructor>
     </resultMap>
     <select id="allSelect" resultMap="deathClaimResultMap">
@@ -65,5 +93,36 @@
                 OR CLAIM_NAME like '%' || #{searchWord} || '%'
             </if>
         </where>
+    </select>
+    <select id="generateDeniedNum" resultType="string">
+        <include refid="deniedListAutoNum" />
+    </select>
+    <select id="generateReportNum" resultType="string">
+        <include refid="deathClaimReportAutoNum" />
+    </select>
+    <update id="insertDenied" parameterType="deniedList">
+        MERGE INTO DENIED_LIST dl
+        USING (SELECT CLAIM_NUM FROM DEATH_CLAIM WHERE CLAIM_NUM = #{claimNum}) dc
+        ON (dl.CLAIM_NUM = dc.CLAIM_NUM)
+        WHEN MATCHED THEN
+            UPDATE SET dl.REASON_FOR_DENIED = #{reasonForDenied}, dl.DENIED_DATE = sysdate
+            WHERE dl.CLAIM_NUM = #{claimNum}
+        WHEN NOT MATCHED THEN
+            INSERT (<include refid="deniedListColumnBase" />)
+            VALUES (#{deniedNum}, #{claimNum}, #{reasonForDenied}, sysdate)
+    </update>
+    <select id="selectDeniedList" resultType="deniedListCount">
+        SELECT REASON_FOR_DENIED as reasonForDenied, COUNT(*) as reasonCount
+        FROM DENIED_LIST
+        GROUP BY REASON_FOR_DENIED
+    </select>
+    <insert id="insertReport" parameterType="deathClaimReport">
+        INSERT INTO DEATH_CLAIM_REPORT(<include refid="deathClaimReportColumnBase" />)
+        VALUES (#{reportNum}, #{reportSubject}, #{reportContent}, sysdate)
+    </insert>
+    <select id="allSelectReport" resultMap="deathClaimReportResultMap">
+        SELECT <include refid="deathClaimReportColumnBase" />
+        FROM DEATH_CLAIM_REPORT
+        ORDER BY REPORT_NUM DESC
     </select>
 </mapper>

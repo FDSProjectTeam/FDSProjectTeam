@@ -1,10 +1,6 @@
 package fdsprojectteam.mapper;
 
-import fdsprojectteam.domain.DeathClaimCountDTO;
-import fdsprojectteam.domain.DeathClaimDTO;
-import fdsprojectteam.domain.DeathClaimPlaceCountDTO;
-import fdsprojectteam.domain.DeathClaimSearchAndPageDTO;
-import org.apache.ibatis.annotations.Param;
+import fdsprojectteam.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +12,10 @@ public interface DeathClaimMapper {
     public List<DeathClaimCountDTO> selectCount();
     public List<DeathClaimPlaceCountDTO> selectPlaceCount();
     public DeathClaimDTO selectOne(String claimNum);
+    public void insertDenied(DeniedListDTO deniedListDTO);
+    public String generateDeniedNum();
+    public List<DeniedListCountDTO> selectDeniedList();
+    public String generateReportNum();
+    public void insertReport(DeathClaimReportDTO deathClaimReportDTO);
+    public List<DeathClaimReportDTO> allSelectReport();
 }
