@@ -23,4 +23,5 @@ public class CarClaimCommand {
 	String claimHospital;
 	String claimSignName;
 	String claimAddr;
+	Integer claimYear;
 }
