@@ -15,4 +15,7 @@ public interface DeathClaimMapper {
     public void insertDenied(DeniedListDTO deniedListDTO);
     public String generateDeniedNum();
     public List<DeniedListCountDTO> selectDeniedList();
+    public String generateReportNum();
+    public void insertReport(DeathClaimReportDTO deathClaimReportDTO);
+    public List<DeathClaimReportDTO> allSelectReport();
 }

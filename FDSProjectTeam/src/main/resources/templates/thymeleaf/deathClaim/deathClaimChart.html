@@ -201,10 +201,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="deathClaimChart">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="deathClaimAbout">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Claims</a>
@@ -263,11 +263,12 @@
                 <div class="flex-box">
                     <div class="item">
                         <!-- 테스트_내용5<br />
-                        (리포트 내역 - 최근 5개)<br /> -->
+                        (리포트 내역 - 가장 최근에 등록된 2개 출력)<br /> -->
                         <h4>리포트</h4>
                         <table class="table table-borderless table-hover" id="reportTable">
-                            <tr><td>COVID-19 감염병 질환 사망으로 인한 사망보험 청구</td></tr>
-                            <tr><td>피보험자와 실제 청구인의 관계가 불확실한 청구</td></tr>
+                            <tr th:each="dto, stat : ${dtos}">
+                                <td th:if="${stat.index < 2}">[[${dto.reportSubject}]]</td>
+                            </tr>
                         </table>
                     </div>
                     <div class="item">

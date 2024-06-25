@@ -1,8 +1,10 @@
 package fdsprojectteam.controller;
 
 import fdsprojectteam.command.DeathClaimCommand;
+import fdsprojectteam.command.DeathClaimReportCommand;
 import fdsprojectteam.domain.*;
 import fdsprojectteam.service.deathClaim.*;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +33,10 @@ public class DeathClaimController {
     DeathClaimAnalyzeService deathClaimAnalyzeService;
     @Autowired
     DeniedListService deniedListService;
+    @Autowired
+    DeathClaimReportWriteService deathClaimReportWriteService;
+    @Autowired
+    DeathClaimReportListService deathClaimReportListService;
     @GetMapping("deathClaimWrite")
     public String deathClaimForm(Model model){
         deathClaimAutoNumService.execute(model);
@@ -73,6 +79,7 @@ public class DeathClaimController {
     @GetMapping("deathClaimChart")
     public String deathClaimChart(Model model){
         deathClaimAnalyzeService.execute(model);
+        deathClaimReportListService.execute(model);
         return "thymeleaf/deathClaim/deathClaimChart";
     }
     // 지급거부통계 페이지
@@ -87,7 +94,19 @@ public class DeathClaimController {
     }
     // 리포트 페이지입니다.
     @GetMapping("deathClaimReport")
-    public String deathClaimReport(){
+    public String deathClaimReport(Model model){
+        deathClaimReportListService.execute(model);
         return "thymeleaf/deathClaim/deathClaimReport";
+    }
+    // 리포트 등록 URL입니다.
+    @PostMapping("deathClaimReportWrite")
+    public String deathClaimReportWrite(DeathClaimReportCommand deathClaimReportCommand){
+        deathClaimReportWriteService.execute(deathClaimReportCommand);
+        return "redirect:deathClaimReport";
+    }
+    // About 페이지 입니다.
+    @GetMapping("deathClaimAbout")
+    public String deathClaimAbout(){
+        return "thymeleaf/deathClaim/deathClaimAbout";
     }
 }

@@ -6,6 +6,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+    <script>
+        $(function(){
+           $("#btnReport").click(function (){
+               $("#reportList").css("display","none");
+               $("#reportWrite").css("display","block");
+           });
+           $("#btnReportCancel").click(function (){
+               $("#reportList").css("display","block");
+               $("#reportWrite").css("display","none");
+               location.reload(true);
+           });
+        });
+    </script>
     <style>
         .layout{
             max-width: 100%;
@@ -44,7 +57,7 @@
                 <a class="nav-link" href="deathClaimChart">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
+                <a class="nav-link" href="deathClaimAbout">About</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#">Claims</a>
@@ -64,17 +77,29 @@
     </aside>
     <article>
         <h3>리포트</h3>
-        <div class="item">
+        <div class="item" style="display: block;" id="reportList">
             <table class="table table-hover">
-                <a style="text-align: right;" href="#">작성하기</a>
+                <a style="text-align: right;" href="#" id="btnReport">작성하기</a><br />
                 <tr><th>번호</th><th>리포트 번호</th><th>제목</th><th>작성 날짜</th></tr>
-                <tr>
-                    <td>번호</td>
-                    <td>리포트 번호</td>
-                    <td>제목</td>
-                    <td>작성 날짜</td>
+                <tr th:each="dto, idx : ${dtos}">
+                    <td>[[${idx.count }]]</td>
+                    <td>[[${dto.reportNum }]]</td>
+                    <td>[[${dto.reportSubject }]]</td>
+                    <td>[[${#dates.format(dto.reportDate,'yyyy-MM-dd') }]]</td>
                 </tr>
             </table>
+        </div>
+        <div class="item" style="display: none;" id="reportWrite">
+            <a style="text-align: right;" href="#" id="btnReportCancel">작성취소</a><br />
+            <form action="deathClaimReportWrite" method="POST">
+                <table class="table table-borderless">
+                    <tr><th>제목<br />
+                        <input type="text" class="form-control" id="reportSubject" name="reportSubject" placeholder="제목을 입력해주세요."></th></tr>
+                    <tr><th>내용<br />
+                        <textarea rows="6" cols="40" class="form-control" id="reportContent" name="reportContent" placeholder="내용을 입력해주세요."></textarea></th></tr>
+                    <tr><th><input type="submit" class="btn btn-outline-dark" value="등록하기" /></th></tr>
+                </table>
+            </form>
         </div>
     </article>
 </div>
