@@ -1,10 +1,10 @@
 package fdsprojectteam.controller;
 
 import fdsprojectteam.command.DeathClaimCommand;
-import fdsprojectteam.domain.DeathClaimCountDTO;
-import fdsprojectteam.domain.DeathClaimDTO;
-import fdsprojectteam.domain.DeathClaimPlaceCountDTO;
+import fdsprojectteam.command.DeathClaimReportCommand;
+import fdsprojectteam.domain.*;
 import fdsprojectteam.service.deathClaim.*;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,14 +31,22 @@ public class DeathClaimController {
     DeathClaimPlaceCountService deathClaimPlaceCountService;
     @Autowired
     DeathClaimAnalyzeService deathClaimAnalyzeService;
+    @Autowired
+    DeniedListService deniedListService;
+    @Autowired
+    DeathClaimReportWriteService deathClaimReportWriteService;
+    @Autowired
+    DeathClaimReportListService deathClaimReportListService;
     @GetMapping("deathClaimWrite")
     public String deathClaimForm(Model model){
         deathClaimAutoNumService.execute(model);
+        deathClaimAnalyzeService.execute(model);
         return "thymeleaf/deathClaim/deathClaimForm";
     }
     @PostMapping("deathClaimWrite")
     public String deathClaimWrite(@Validated DeathClaimCommand deathClaimCommand, BindingResult result, Model model) throws Exception {
         if(result.hasErrors()){
+            deathClaimAnalyzeService.execute(model);
             return "thymeleaf/deathClaim/deathClaimForm";
         }
         deathClaimWriteService.execute(deathClaimCommand, model);
@@ -71,6 +79,34 @@ public class DeathClaimController {
     @GetMapping("deathClaimChart")
     public String deathClaimChart(Model model){
         deathClaimAnalyzeService.execute(model);
+        deathClaimReportListService.execute(model);
         return "thymeleaf/deathClaim/deathClaimChart";
+    }
+    // 지급거부통계 페이지
+    @GetMapping("deathClaimDenied")
+    public String deathClaimDenied(){
+        return "thymeleaf/deathClaim/deathClaimDenied";
+    }
+    // 지급거부통계 페이지의 차트에 쓰이는 URL입니다.
+    @PostMapping("deniedListCount")
+    public @ResponseBody List<DeniedListCountDTO> deniedListCount() throws Exception{
+        return deniedListService.execute();
+    }
+    // 리포트 페이지입니다.
+    @GetMapping("deathClaimReport")
+    public String deathClaimReport(Model model){
+        deathClaimReportListService.execute(model);
+        return "thymeleaf/deathClaim/deathClaimReport";
+    }
+    // 리포트 등록 URL입니다.
+    @PostMapping("deathClaimReportWrite")
+    public String deathClaimReportWrite(DeathClaimReportCommand deathClaimReportCommand){
+        deathClaimReportWriteService.execute(deathClaimReportCommand);
+        return "redirect:deathClaimReport";
+    }
+    // About 페이지 입니다.
+    @GetMapping("deathClaimAbout")
+    public String deathClaimAbout(){
+        return "thymeleaf/deathClaim/deathClaimAbout";
     }
 }

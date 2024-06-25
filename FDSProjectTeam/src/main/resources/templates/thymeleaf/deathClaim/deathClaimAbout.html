@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>deathClaimAbout.html</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
+    <style>
+        .layout{
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 1em;
+        }
+        aside{
+            flex-basis: 260px;
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: 10px;
+            font-size: 18px;
+            line-height: 210%;
+            background-color: white;
+        }
+        article{
+            flex-basis: 880px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            border-bottom: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">FDSProjectTeam</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="deathClaimChart">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="deathClaimAbout">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Claims</a>
+            </li>
+        </ul>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav2">
+        관리자 페이지
+    </div>
+</nav>
+<div class="layout">
+    <aside>
+        <a href="deathClaimChart">통계 및 분석</a><br />
+        <a href="deathClaimWrite">부당 지급 확인</a><br />
+        <a href="deathClaimList">청구서 목록</a><br />
+        <a href="deathClaimReport">리포트</a><br />
+    </aside>
+    <article>
+        <h4>About</h4><br />
+        <div class="item">
+            <h4>사망보험의 이상 거래 탐지가 왜 필요한가요?</h4><br />
+            사망보험은 보험금을 지급하는 과정에서 부정행위의 위험이 있습니다.<br />
+            예를 들어, 보험 사기, 적발되지 않은 건강 상태의 은폐 등이 해당됩니다.<br />
+            이러한 부정행위를 탐지하고 예방함으로써 보험사의 손실을 최소화할 수 있습니다.<br />
+            또한 보험 사기는 금융 기관의 신뢰도를 훼손 시킬 수 있습니다.<br />
+            FDS를 도입하여 부정행위를 탐지하고 처리함으로써 금융 기관의 신뢰도를 높일 수 있습니다.<br />
+        </div>
+    </article>
+</div>
+</body>
+</html>
