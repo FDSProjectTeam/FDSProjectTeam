@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,10 +42,10 @@
         <tr th:if="${success}">
             <th colspan="2"><span th:text="${resultMessages}"></span></th>
         </tr>
-        
     </table>
     <table class="table table-borderless" style="text-align: center;">
-        <tr><th><button type="button" class="btn btn-outline-dark" onclick="javascript:location.href='/'">홈으로</button></th></tr>
+        <tr><th><button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button>
+        		<button type="button" class="btn btn-outline-dark" onclick="javascript:location.href='/'">홈으로</button></th></tr>
     </table>
 </body>
 </html>

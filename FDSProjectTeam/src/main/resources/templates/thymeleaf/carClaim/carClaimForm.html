@@ -9,10 +9,14 @@
     <br />
     <h3 style="text-align: center">자동차보험 청구서</h3>
     <br />
-	<form  action="carClaimWrite" method="post">
+	<form  action="carClaimWrite" method="post" th:object="${carClaimCommand}">
+
 		<table class="table table-borderless">
+			<tr><td  colspan="2" style="text-align: right;">
+			<a href="/carClaimChart" style="display: inline-block; padding: 10px 20px; background-color: white; color: black; text-decoration: none; border: 1px solid black; border-radius: 5px; text-align: center;">연간 청구수</a>
+			</td></tr>
 			<tr><th>청구번호<br />
-	               <input type="text" class="form-control"  name="claimNumber"></th></tr>
+	               <input type="text" class="form-control"  name="claimNumber" readonly="readonly" th:value="${carClaimCommand.claimNumber}"></th></tr>
 			<tr><th>(피보험자)차량번호<br />
 	               <input type="text" class="form-control" name="memCarNumber" ></th></tr>
 			<tr><th>회원(피보험자)이름<br />
@@ -38,15 +42,13 @@
 			<tr><th>청구인성명<br />
 	               <input type="text" class="form-control" name="claimSignName" ></th></tr>
 			<tr><th>청구인주소<br />
-	               <input type="text" class="form-control" name="claimAddr" ><br/>
-
+	               <input type="text" class="form-control" name="claimAddr" ></th></tr>
 		</table>
 		        <table class="table table-borderless" style="text-align: center;">
             <tr><th><input type="submit" class="btn btn-outline-dark" value="확인">
                     <button type="button" class="btn btn-outline-dark" onclick="javascript:history.back()">뒤로가기</button></th></tr>
         </table>
 	</form>
-
 </body>
 </html>
 

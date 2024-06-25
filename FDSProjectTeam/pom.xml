@@ -141,6 +141,7 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/INIpaySample_v1.3.jar</systemPath>
         </dependency>
+
     </dependencies>
 
     <build>

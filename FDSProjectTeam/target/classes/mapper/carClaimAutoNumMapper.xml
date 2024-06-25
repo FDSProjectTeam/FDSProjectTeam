@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC
         "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="fdsprojectteam.mapper.AutoNumMapper">
+<mapper namespace="fdsprojectteam.mapper.CarClaimAutoNumMapper">
     <select id="autoNum" parameterType="string" resultType="string">
-		select concat(#{sep}, nvl(max(substr(${columnName},4)),100000) + 1) from ${tableName}
+		select concat(#{sep}, nvl(max(substr(${columnName},4)),100000) + 1)
+		from ${tableName}
 	</select>
 </mapper>
