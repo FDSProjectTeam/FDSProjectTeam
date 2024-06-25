@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PurchaseCommand {
     private String purchaseId;
     private String customerId;
-    private String purchasePrice;
+    private Integer purchasePrice;
     private String cardNum;
     private String expiryYear;
     private String expiryMonth;

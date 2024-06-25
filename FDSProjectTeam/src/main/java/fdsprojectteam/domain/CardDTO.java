@@ -17,4 +17,5 @@ public class CardDTO {
     private String cardNum;
     private Date expiryDate;
     private String issueCountry;
+    private Integer errorCount;
 }

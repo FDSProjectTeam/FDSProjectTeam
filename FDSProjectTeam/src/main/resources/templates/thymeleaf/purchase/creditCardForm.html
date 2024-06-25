@@ -3,29 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <title>CreditCard_Payment</title>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/bootstrap.min.css">
 </head>
 <body>
-<h2>결제 정보 입력</h2>
+<a href="/pgAdmin">관리자 페이지로 이동</a>
+<h2 style="text-align: center;">결제 정보 입력</h2>
 <form action="/payment" method="post">
-    결제 ID:<br>
-    <input type="text" name="purchaseId" th:value="${purchaseCommand.purchaseId}" required><br><br>
-
-    고객 ID:<br>
-    <input type="text" name="customerId" required><br><br>
-
-    결제 금액:<br>
-    <input type="number" name="purchasePrice" required><br><br>
-
-    카드번호:<br>
-    <input type="text" name="cardNum" required><br><br>
-
-    카드유효기간:<br>
-    <input type="text" name="expiryYear" required> / <input type="text" name="expiryMonth" required><br><br>
-
-    IP 주소:<br>
-    <input type="text" name="ipAddress" required><br><br>
-
-    <input type="submit" value="제출">
+    <table class="table table-borderless" >
+        <tr>
+            <th>
+                결제 ID:<br>
+                <input type="text" class="form-control" name="purchaseId" th:value="${purchaseCommand.purchaseId}" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                고객 ID:<br>
+                <input type="text" class="form-control" name="customerId" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                결제 금액:<br>
+                <input type="number" class="form-control" name="purchasePrice" required>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                카드번호:<br>
+                <input type="text" class="form-control" name="cardNum" required>
+            </th>
+        </tr>
+        <tr>
+            <th >
+                카드유효기간:<br>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="expiryYear" required>
+                    <span class="input-group-text">/</span>
+                    <input type="text" class="form-control" name="expiryMonth" required>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                IP 주소:<br>
+                <input type="text" class="form-control" name="ipAddress" required>
+            </th>
+        </tr>
+    </table>
+    <table align="center">
+        <tr>
+            <th>
+                <input type="submit" class="btn btn-outline-dark" value="제출">
+            </th>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

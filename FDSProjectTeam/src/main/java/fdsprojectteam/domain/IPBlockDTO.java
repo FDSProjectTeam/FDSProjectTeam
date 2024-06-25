@@ -10,13 +10,9 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Alias("purchase")
-public class PurchaseDTO {
-    private String purchaseId;
-    private String cardId;
+@Alias("IPBlock")
+public class IPBlockDTO {
     private String customerId;
-    private String countryId;
-    private Integer purchasePrice;
-    private Date purchaseDate;
-    private String purchaseStatus;
+    private Integer ipAddress;
+    private Date blockDate;
 }
